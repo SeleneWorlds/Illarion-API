@@ -1,0 +1,26 @@
+{
+  "name": "Illarion Bridge",
+  "description": "A bridge that implements Illarion lua bindings, allowing native Illarion scripts to run in Selene.",
+  "dependencies": ["moonlight"],
+  "entrypoints": [
+    "server/lua/ArmorStruct.lua",
+    "server/lua/Character.lua",
+    "server/lua/colour.lua",
+    "server/lua/Container.lua",
+    "server/lua/Field.lua",
+    "server/lua/InputDialog.lua",
+    "server/lua/Item.lua",
+    "server/lua/ItemLookAt.lua",
+    "server/lua/ItemStruct.lua",
+    "server/lua/logging.lua",
+    "server/lua/LongTimeEffect.lua",
+    "server/lua/MessageDialog.lua",
+    "server/lua/Player.lua",
+    "server/lua/polyfills.lua",
+    "server/lua/position.lua",
+    "server/lua/random.lua",
+    "server/lua/ScriptVars.lua",
+    "server/lua/WeaponStruct.lua",
+    "server/lua/world.lua"
+  ]
+}
