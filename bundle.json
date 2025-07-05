@@ -1,5 +1,5 @@
 {
-  "name": "Illarion Bridge",
+  "name": "illarion-api",
   "description": "A bridge that implements Illarion lua bindings, allowing native Illarion scripts to run in Selene.",
   "dependencies": ["moonlight"],
   "entrypoints": [
