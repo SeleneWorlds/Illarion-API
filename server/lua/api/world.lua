@@ -1,4 +1,5 @@
 local Sounds = require("selene.sounds")
+local Registries = require("selene.registries")
 local IllaSounds = require("illarion-api.server.lua.data.sounds")
 
 world = {}
@@ -121,8 +122,8 @@ function world:swap(item, newId, newQuality)
 end
 
 function world:makeSound(soundId, pos)
-    local sound = IllaSounds.GetSoundById(soundId)
+    local sound = Registries.FindByMetadata("illarion:sounds", "id", tostring(soundId))
     if sound ~= nil then
-        Sounds.PlaySoundAt(pos.x, pos.y, pos.z, sound)
+        Sounds.PlaySoundAt(pos.x, pos.y, pos.z, sound.Name)
     end
 end
