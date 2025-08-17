@@ -786,7 +786,7 @@ local ItemMethods = {
         return scriptItem.notdefined
     end,
     getData = function(Item, Key)
-        return nil -- TODO
+        return "" -- TODO
     end,
     setData = function(Item, Key, Value)
         -- TODO

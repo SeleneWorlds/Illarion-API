@@ -1,6 +1,5 @@
 local Sounds = require("selene.sounds")
 local Registries = require("selene.registries")
-local IllaSounds = require("illarion-api.server.lua.data.sounds")
 
 world = {}
 
@@ -119,6 +118,22 @@ function world:getPlayersOnline()
 end
 
 function world:swap(item, newId, newQuality)
+    local NewTileDef = Registries.FindByMetadata("tiles", "id", tostring(newId))
+    if NewTileDef == nil then
+        print("No such tile " .. newId) -- TODO throw an error
+        return
+    end
+
+    if item:getType() == scriptItem.field then
+        if item.SeleneTile ~= nil then
+            local map = item.SeleneTile.Dimension.Map
+            map:SwapTile(item.SeleneTile.Coordinate, item.SeleneTile.Name, NewTileDef.Name)
+        end
+    elseif item:getType() == scriptItem.inventory or item:getType() == scriptItem.belt then
+        -- TODO swapAtPos
+    elseif item:getType() == scriptItem.container then
+        -- TODO swapAtPos
+    end
 end
 
 function world:makeSound(soundId, pos)
