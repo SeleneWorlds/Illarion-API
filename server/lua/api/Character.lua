@@ -160,7 +160,9 @@ Character = {
     windMagic = 40,
     earthMagic = 39,
     waterMagic = 38,
-    spatialMagic = 66
+    spatialMagic = 66,
+    panpipe = 35,
+    clavichord = 67
 }
 
 local CharacterGetters = {
@@ -503,12 +505,10 @@ local CharacterMT = {
     __index = function(table, key)
         local method = CharacterMethods[key]
         if method then
-            print("method " .. key)
             return method
         end
         local getter = CharacterGetters[key]
         if getter then
-            print("getter " .. key)
             return getter(table)
         end
 

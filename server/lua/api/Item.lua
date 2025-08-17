@@ -768,6 +768,12 @@ Item = {
     woodenSword = 0,
     Worth = 0,
     yellowDye = 0,
+    pumpkin = 0,
+    bellpepper = 0,
+    corn = 0,
+    lettuce = 0,
+    cucumber = 0,
+    cupriteOre = 0
 }
 
 scriptItem = {
