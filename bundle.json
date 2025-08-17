@@ -4,6 +4,7 @@
   "dependencies": ["moonlight"],
   "entrypoints": [
     "server/lua/polyfills.lua",
+    "server/lua/api/Action.lua",
     "server/lua/api/ArmorStruct.lua",
     "server/lua/api/Character.lua",
     "server/lua/api/colour.lua",
@@ -20,6 +21,7 @@
     "server/lua/api/position.lua",
     "server/lua/api/random.lua",
     "server/lua/api/ScriptVars.lua",
+    "server/lua/api/SelectionDialog.lua",
     "server/lua/api/WeaponStruct.lua",
     "server/lua/api/world.lua"
   ]

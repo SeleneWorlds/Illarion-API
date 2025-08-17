@@ -222,7 +222,7 @@ local CharacterMethods = {
         Moonlight.Dialog.ShowMessage(User, Dialog)
     end,
     requestMerchantDialog = function(User, Dialog)
-        Network.SendToPlayer(User, "illarion:merchant", dialog)
+        Network.SendToPlayer(User, "illarion:merchant", Dialog)
     end,
     requestSelectionDialog = function(User, Dialog)
         Moonlight.Dialog.RequestSelection(User, Dialog)
@@ -290,7 +290,19 @@ local CharacterMethods = {
         User.SeleneEntity():MoveTowards(Direction)
     end,
     turn = function(User, Direction)
-        User.SeleneEntity():TurnTowards(Direction)
+        local SeleneDirection = nil
+        if Direction == Character.north then
+            SeleneDirection = "north"
+        elseif Direction == Character.south then
+            SeleneDirection = "south"
+        elseif Direction == Character.east then
+            SeleneDirection = "east"
+        elseif Direction == Character.west then
+            SeleneDirection = "west"
+        end
+        if SeleneDirection then
+            User.SeleneEntity():SetFacing(SeleneDirection)
+        end
     end,
     getNextStepDir = function(User, Position, OutDir)
         -- TODO Not used in scripts. Performs a pathfind and returns the first step to take.
@@ -303,7 +315,17 @@ local CharacterMethods = {
         return User.SeleneEntity():GetCustomData("illarion:race")
     end,
     getFaceTo = function(User)
-        return User.SeleneEntity():GetFacingDirection()
+        local SeleneDirection = User.SeleneEntity().Facing
+        if SeleneDirection == "north" then
+            return Character.north
+        elseif SeleneDirection == "south" then
+            return Character.south
+        elseif SeleneDirection == "east" then
+            return Character.east
+        elseif SeleneDirection == "west" then
+            return Character.west
+        end
+        return Character.north
     end,
     getType = function(User)
         -- TODO Monster/NPC
@@ -349,7 +371,9 @@ local CharacterMethods = {
     increaseAtPos = function(user, bodyPosition, count) end,
     swapAtPos = function(user, bodyPosition, itemID, quality) end,
     createAtPos = function(user, bodyPosition, itemID, count) end,
-    getItemAt = function(user) end,
+    getItemAt = function(user)
+        return Item.fromSeleneEmpty()
+    end,
     getSkillName = function(user, targetSkill) return "" end,
     getSkill = function(User, TargetSkill)
         return User.SeleneEntity():GetSkill(TargetSkill)

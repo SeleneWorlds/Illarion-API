@@ -142,3 +142,26 @@ function world:makeSound(soundId, pos)
         Sounds.PlaySoundAt(pos.x, pos.y, pos.z, sound.Name)
     end
 end
+
+function world:getItemName(ItemId, Language)
+    local tile = Registries.FindByMetadata("tiles", "id", tostring(ItemId))
+    if tile then
+        if Language == Player.german then
+            return tile:GetMetadata("nameGerman")
+        elseif Language == Player.english then
+            return tile:GetMetadata("nameEnglish")
+        else
+            return tile:GetMetadata("nameEnglish")
+        end
+    end
+
+    return "unknown_item_" .. ItemId
+end
+
+function world:getField(pos)
+    return SeleneField()
+end
+
+function world:isCharacterOnField(pos)
+    return false
+end
