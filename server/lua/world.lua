@@ -114,3 +114,9 @@ end
 function world:getPlayersOnline()
     return {}
 end
+
+function world:swap(item, newId, newQuality)
+end
+
+function world:makeSound(soundId, pos)
+end
