@@ -778,11 +778,55 @@ scriptItem = {
     container = 6
 }
 
-function SeleneItem()
-    return {
-        getData = function(key) return "" end,
-        getType = function() return scriptItem.notdefined end,
-        isLarge = function() return false end,
-        setData = function(key, value) end
-    }
+local ItemMethods = {
+    getType = function(Item)
+        if Item.SeleneTile then
+            return scriptItem.field
+        end
+        return scriptItem.notdefined
+    end,
+    getData = function(Item, Key)
+        return nil -- TODO
+    end,
+    setData = function(Item, Key, Value)
+        -- TODO
+    end
+}
+
+local ItemGetters = {
+    id = function(Item) return tonumber(Item.SeleneTile:GetMetadata("id")) end,
+    isLarge = function(Item) return false end, -- TODO what is this?
+    pos = function(Item) return {
+        x = Item.SeleneTile.X,
+        y = Item.SeleneTile.Y,
+        z = Item.SeleneTile.Z
+    } end
+}
+
+local ItemSetters = {}
+
+local ItemMT = {
+    __index = function(table, key)
+        local method = ItemMethods[key]
+        if method then
+            return method
+        end
+        local getter = ItemGetters[key]
+        if getter then
+            return getter(table)
+        end
+
+        return rawget(table, key)
+    end,
+    __newindex = function(table, key, value)
+        local setter = ItemSetters[key]
+        if setter then
+            setter(table, value)
+            return
+        end
+    end
+}
+
+function Item.fromSeleneTile(Tile)
+    return setmetatable({SeleneTile = Tile}, ItemMT)
 end
