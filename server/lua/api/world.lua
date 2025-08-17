@@ -1,3 +1,5 @@
+local Sounds = require("selene.sounds")
+local IllaSounds = require("illarion-api.server.lua.data.sounds")
 
 world = {}
 
@@ -119,4 +121,8 @@ function world:swap(item, newId, newQuality)
 end
 
 function world:makeSound(soundId, pos)
+    local sound = IllaSounds.GetSoundById(soundId)
+    if sound ~= nil then
+        Sounds.PlaySoundAt(pos.x, pos.y, pos.z, sound)
+    end
 end
