@@ -63,107 +63,29 @@ Character = {
     west = 6,
     northwest = 7,
 
-    -- race_type
-    human = 0,
-    dwarf = 1,
-    halfling = 2,
-    elf = 3,
-    orc = 4,
-    lizardman = 5,
-    columnOfResurrection = 7,
-    forestTroll = 9,
-    mummy = 10,
-    skeleton = 11,
-    floatingEye = 12,
-    sheep = 18,
-    spider = 19,
-    pig = 24,
-    wasp = 27,
-    golem = 30,
-    cow = 37,
-    wolf = 39,
-    bear = 51,
-    raptor = 52,
-    zombie = 53,
-    hellhound = 54,
-    imp = 55,
-    ironGolem = 56,
-    ratman = 57,
-    dog = 58,
-    beetle = 59,
-    fox = 60,
-    slime = 61,
-    chicken = 62,
-    boneDragon = 63,
-    rat = 111,
-    fleshDragon = 112,
-    rabbit = 113,
-    akaltut = 114,
-    fairy = 115,
-    deer = 116,
-    etting = 117,
-
     -- inform_type
     lowPriority = 100,
     mediumPriority = 101,
     highPriority = 102,
-
-    -- skills TODO
-    tailoring = 14,
-    blacksmithing = 15,
-    gemcutting = 18,
-    carpentry = 13,
-    cookingAndBaking = 12,
-    finesmithing = 10,
-    glassBlowing = 8,
-    pottery = 36,
-    armourer = 50,
-    brewing = 51,
-    harp = 34,
-    horn = 32,
-    flute = 31,
-    lute = 30,
-    herblore = 16,
-    mining = 9,
-    fishing = 19,
-    farming = 17,
-    woodcutting = 11,
-    tanningAndWeaving = 49,
-    husbandry = 48,
-    digging = 47,
-    parry = 24,
-    heavyArmour = 45,
-    mediumArmour = 44,
-    lightArmour = 43,
-    distanceWeapons = 29,
-    slashingWeapons = 27,
-    concussionWeapons = 26,
-    punctureWeapons = 28,
-    wrestling = 21,
-    blessing = 54,
-    praying = 55,
-    vowing = 56,
-    confessing = 57,
-    ceremony = 58,
-    consecrateWeapons = 59,
-    consecrateArmours = 60,
-    magicResistance = 37,
-    alchemy = 20,
-    potionLore = 61,
-    animalTaming = 62,
-    summoning = 63,
-    natureLore = 64,
-    cauldronLore = 65,
-    enchanting = 46,
-    fireMagic = 42,
-    spiritMagic = 41,
-    windMagic = 40,
-    earthMagic = 39,
-    waterMagic = 38,
-    spatialMagic = 66,
-    panpipe = 35,
-    clavichord = 67
 }
+
+local allRaces = Registries.FindAll("illarion:races")
+for _, Race in ipairs(allRaces) do
+    local name = Race:GetMetadata("name")
+    local id = Race:GetMetadata("id")
+    if name and id then
+        Character[name] = tonumber(id)
+    end
+end
+
+local allSkills = Registries.FindAll("illarion:skills")
+for _, Skill in ipairs(allSkills) do
+    local name = Skill:GetMetadata("name")
+    local id = Skill:GetMetadata("id")
+    if name and id then
+        Character[name] = tonumber(id)
+    end
+end
 
 local CharacterGetters = {
     lastSpokenText = function(User) return User.SeleneEntity():GetChatHistory(-1) end,
