@@ -96,6 +96,19 @@ m.Player = {
     GetID = function(Player) return 0 end
 }
 
+m.LTE = {
+    Create = function(id, nextCalled) end,
+    AddEffect = function(user, effect) end,
+    FindEffect = function(user, idOrName) return false, nil end,
+    RemoveEffect = function(user, effect) return false end,
+    AddValue = function(effect, key, value) end,
+    FindValue = function(effect, key) end,
+    RemoveValue = function(effect, key) end,
+    SetNextCalled = function(effect, value) end,
+    GetNextCalled = function(effect) return 0 end,
+    GetNumberCalled = function(effect) return 0 end
+}
+
 m.Logger = {
     LogAdmin = function(Player, Message)
         print("[Admin] " .. Message)

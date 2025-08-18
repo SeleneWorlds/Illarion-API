@@ -92,17 +92,15 @@ local CharacterGetters = {
     lastSpokenText = function(User)
         return Interface.Chat.GetLastSpokenText(User.SeleneEntity())
     end,
-    effects = function(User) return {
-        addEffect = function(User, effect)
-            print("effects.addEffect")
+    effects = function(user) return {
+        addEffect = function(self, effect)
+            return Interface.LTE.AddEffect(user, effect)
         end,
-        find = function(User, idOrName)
-            print("effects.find")
-            return false, nil
+        find = function(self, idOrName)
+            return Interface.LTE.FindEffect(user, idOrName)
         end,
-        removeEffect = function(User, idOrNameOrEffect)
-            print("effects.removeEffect")
-            return false
+        removeEffect = function(self, idOrNameOrEffect)
+            Interface.LTE.RemoveEffect(user, idOrNameOrEffect)
         end
     } end,
     waypoints = function(User) return {
@@ -212,8 +210,8 @@ local CharacterMethods = {
     changeSource = function(User, Item)
         print("changeSource")
     end,
-    inform = function(User, Message)
-        Interface.Player.Inform(User.SelenePlayer, Message)
+    inform = function(user, message)
+        Interface.Player.Inform(user, message)
     end,
     introduce = function(User)
         print("introduce")
