@@ -1,5 +1,6 @@
 local Sounds = require("selene.sounds")
 local Registries = require("selene.registries")
+local Dimensions = require("selene.dimensions")
 
 world = {}
 
@@ -82,39 +83,107 @@ function world:getTime(timeType)
     return -1
 end
 
-function world:getItemStatsFromId(foodId)
-    return {
-        Level = 0
-    }
+function world:getItemStatsFromId(itemId)
+    local tile = Registries.FindByMetadata("tiles", "id", tostring(itemId))
+    if tile then
+        return ItemStruct.fromSeleneTileDef(tile)
+    end
+    return nil
 end
 
 function world:isItemOnField(position)
-   return false
+    local dimension = Dimensions.GetDefault()
+    local tiles = dimension.GetTilesAt(position)
+    for _, tile in ipairs(tiles) do
+        if tile:HasTag("illarion:item") then
+            return true
+        end
+    end
+    local entities = dimension.GetEntitiesAt(position)
+    for _, entity in ipairs(entities) do
+        if entity:HasTag("illarion:item") then
+            return true
+        end
+    end
+    return false
 end
 
 function world:getItemOnField(position)
-    return {
-        id = 0,
-        wear = 0,
-        number = 0
-    }
+    local dimension = Dimensions.GetDefault()
+    local entities = dimension.GetEntitiesAt(position)
+    for _, entity in ipairs(entities) do
+        if entity:HasTag("illarion:item") then
+            return Item.fromSeleneEntity(entity)
+        end
+    end
+
+    local tiles = dimension.GetTilesAt(position)
+    for _, tile in ipairs(tiles) do
+        if tile:HasTag("illarion:item") then
+            return Item.fromSeleneTile(tile)
+        end
+    end
+
+    return Item.fromSeleneEmpty()
 end
 
 function world:changeItem(item)
+    print("changeItem")
 end
 
 function world:getPlayersInRangeOf(pos, range)
-    return {}
+    local dimension = Dimensions.GetDefault()
+    local entities = dimension.GetEntitiesInRange(pos, range)
+    local result = {}
+    for _, entity in ipairs(entities) do
+        if entity:HasTag("illarion:player") then
+            -- TODO need to get player controlling this entity
+            table.insert(result, Character.fromSeleneEntity(entity))
+        end
+    end
+    return result
 end
 
 function world:erase(item, amount)
+    local TileDef = Registries.FindByMetadata("tiles", "id", tostring(item.id))
+    if TileDef == nil then
+        print("No such tile " .. item.id) -- TODO throw an error
+        return
+    end
+
+    if item:getType() == scriptItem.field then
+        local dimension = Dimensions.GetDefault()
+        -- TODO erase from entity items if found
+        if dimension:HasTile(tile.Coordinate, TileDef.Name) then
+            dimension.Map:RemoveTile(tile.Coordinate, TileDef.Name)
+            return true
+        end
+    elseif item:getType() == scriptItem.inventory or item:getType() == scriptItem.belt then
+        local blockedItemId = 228
+        if (item.itempos == Character.right_tool && (item.owner:GetItemAt(Character.left_tool)).id == blockedItemId) {
+            item.owner:increaseAtPos(Character.left_tool, -250);
+        } else if (item.itempos == Character.left_tool && (item.owner:GetItemAt(Character.right_tool)).id == blockedItemId) {
+            item.owner:increaseAtPos(Character.right_tool, -250);
+        }
+
+        item.owner:increaseAtPos(item.itempos, -amount);
+        return true
+    elseif item:getType() == scriptItem.container then
+        item.inside:increaseAtPos(item.itempos, -amount)
+    end
 end
 
 function world:gfx(id, pos)
+    print("gfx")
 end
 
 function world:getPlayersOnline()
-    return {}
+    local result = {}
+    local players = Server.GetPlayers()
+    for _, player in ipairs(players) do
+        table.insert(result, Character.fromSelenePlayer(player))
+    end
+    return result
 end
 
 function world:swap(item, newId, newQuality)
@@ -130,9 +199,9 @@ function world:swap(item, newId, newQuality)
             map:SwapTile(item.SeleneTile.Coordinate, item.SeleneTile.Name, NewTileDef.Name)
         end
     elseif item:getType() == scriptItem.inventory or item:getType() == scriptItem.belt then
-        -- TODO swapAtPos
+        item.owner:swapAtPos(item.itempos, newId, newQuality)
     elseif item:getType() == scriptItem.container then
-        -- TODO swapAtPos
+        item.inside:swapAtPos(item.itempos, newId, newQuality)
     end
 end
 
@@ -159,9 +228,17 @@ function world:getItemName(ItemId, Language)
 end
 
 function world:getField(pos)
-    return SeleneField()
+    local dimension = Dimensions.GetDefault()
+    return Field.fromSelenePosition(dimension, pos)
 end
 
 function world:isCharacterOnField(pos)
+    local dimension = Dimensions.GetDefault()
+    local entities = dimension.GetEntitiesAt(pos)
+    for _, entity in ipairs(entities) do
+        if entity:HasTag("illarion:player") then
+            return true
+        end
+    end
     return false
 end

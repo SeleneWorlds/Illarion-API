@@ -1,4 +1,5 @@
-local Moonlight = require("moonlight")
+local Registries = require("selene.registries")
+local Interface = require("illarion-api.server.lua.interface")
 
 Character = {
     -- body_pos
@@ -88,40 +89,55 @@ for _, Skill in ipairs(allSkills) do
 end
 
 local CharacterGetters = {
-    lastSpokenText = function(User) return User.SeleneEntity():GetChatHistory(-1) end,
-    effects = function(User) return { -- TODO Need to think about how we want to expose scheduled scripts / tickers in Selene
-        addEffect = function(User, effect) end,
-        find = function(User, idOrName) return false, nil end,
-
-        removeEffect = function(User, idOrNameOrEffect) return false end
+    lastSpokenText = function(User)
+        return Interface.Chat.GetLastSpokenText(User.SeleneEntity())
+    end,
+    effects = function(User) return {
+        addEffect = function(User, effect)
+            print("effects.addEffect")
+        end,
+        find = function(User, idOrName)
+            print("effects.find")
+            return false, nil
+        end,
+        removeEffect = function(User, idOrNameOrEffect)
+            print("effects.removeEffect")
+            return false
+        end
     } end,
-    waypoints = function(User) return {} end, -- TODO not sure what methods are exposed here
+    waypoints = function(User) return {
+        addWaypoint = function(Waypoint)
+            print("waypoints.addWaypoint")
+        end,
+        clear = function()
+           print("waypoints.clear")
+        end
+    } end,
     pos = function(User)
         return User.SeleneEntity().Coordinate
     end,
     name = function(User) return User.SeleneEntity().Name end,
-    id = function(User) return User.SelenePlayer:GetPersistentNumericID() end,
-    activeLanguage = function(User) return User.SeleneEntity():GetChatLanguage().Data.IllarionID end,
-    movepoints = function(User) return 21 end, -- TODO We need to think about this since it's not strictly only script-related.
-    fightpoints = function(User) return User.SeleneEntity():GetFightPoints() end,
-    speed = function(User) return 1 end, -- TODO We need to think about this since it's not strictly only script-related.
+    id = function(User) return Interface.Player.GetID(User.SelenePlayer) end,
+    activeLanguage = function(User) return Interface.Chat.GetLanguage(User.SeleneEntity()) end,
+    movepoints = function(User) return Interface.Movement.GetMovePoints(User.SeleneEntity()) end,
+    fightpoints = function(User) return Interface.Combat.GetFightPoints(User.SeleneEntity():GetFightPoints()) end,
+    speed = function(User) return Interface.Movement.GetSpeed(User.SeleneEntity()) end,
     isinvisible = function(User) return User.SeleneEntity():IsInvisible() end,
-    attackmode = function(User) return User.SeleneEntity():IsInCombat() end,
+    attackmode = function(User) return Interface.Combat.IsInCombat(User.SeleneEntity()) end,
 }
 
 local CharacterSetters = {
     activeLanguage = function(User, Value)
-        local language = Moonlight.Chat.Languages[Value] -- TODO Find the language by its IllarionID instead
-        User.SeleneEntity():SetChatLanguage(language)
+        Interface.Chat.SetLanguage(User.SeleneEntity(), Value)
     end,
     movepoints = function(User, Value)
-         -- TODO We need to think about this since it's not strictly only script-related.
+         Interface.Movement.SetMovePoints(User.SeleneEntity(), Value)
     end,
     fightpoints = function(User, Value)
-        User.SeleneEntity():SetFightPoints(value)
+        Interface.Combat.SetFightPoints(User.SeleneEntity(), Value)
     end,
     speed = function(User, Value)
-         -- TODO We need to think about this since it's not strictly only script-related.
+        Interface.Movement.SetSpeed(User.SeleneEntity(), Value)
     end,
     isinvisible = function(user, value)
         User.SeleneEntity():MakeInvisible()
@@ -130,86 +146,81 @@ local CharacterSetters = {
 
 local CharacterMethods = {
     isNewPlayer = function(User)
-        -- TODO In Illarion, runs an is_new_player database query. We probably want to track Noobia completion to set a persisted flag for this client.
-        return false
+        return Interface.Player.GetTotalOnlineTime(User.SelenePlayer) < 10 * 60 * 60
     end,
     pageGM = function(User, Text)
-        -- Illarion has persisted GM tickets, we just pipe it into the GM chat channel.
-        return Moonlight.Chat.GetChannel("GM"):SendAs(User, Text)
+        Interface.Player.PageGM(User.SelenePlayer, Text)
     end,
     requestInputDialog = function(User, Dialog)
-        Moonlight.Dialog.RequestInput(User, Dialog)
+        Interface.Dialog.RequestInput(User.SelenePlayer, Dialog)
     end,
     requestMessageDialog = function(User, Dialog)
-        Moonlight.Dialog.ShowMessage(User, Dialog)
+        Interface.Dialog.ShowMessage(User.SelenePlayer, Dialog)
     end,
     requestMerchantDialog = function(User, Dialog)
-        Network.SendToPlayer(User, "illarion:merchant", Dialog)
+        Interface.Dialog.ShowMerchant(User.SelenePlayer, Dialog)
     end,
     requestSelectionDialog = function(User, Dialog)
-        Moonlight.Dialog.RequestSelection(User, Dialog)
+        Interface.Dialog.RequestSelection(User.SelenePlayer, Dialog)
     end,
     requestCraftingDialog = function(User, Dialog)
-        Network.SendToPlayer(User, "illarion:crafting", dialog)
+        Interface.Dialog.ShowCrafting(User.SelenePlayer, Dialog)
     end,
     idleTime = function(User)
         return User.SelenePlayer:GetIdleTime()
     end,
     sendBook = function(User, BookID)
-        Network.SendToPlayer(User, "illarion:book", BookID)
+        Interface.Dialog.ShowBook(User.SelenePlayer, BookID)
     end,
     updateAppearance = function(User)
-        User.SeleneEntity():ResyncVisuals()
+        User.SeleneEntity():UpdateVisual()
     end,
     performAnimation = function(User, AnimID)
-        User.SeleneEntity():PlayAnimation(AnimID)
+        print("performAnimation", AnimID)
     end,
     actionRunning = function(User)
-        return User.SeleneEntity():IsPerformingAction()
+        print("actionRunning")
+        return false -- TODO Actions
     end,
     changeQualityAt = function(User, BodyPosition, Amount)
-        local equipment = User.SeleneEntity():GetInventory(BodyPosition)
-        local item = equipment:GetItem(0)
-        item.Data.Quality = Amount
-        item.MarkDirty()
+        Interface.Inventory.ChangeQualityAt(User.SeleneEntity(), BodyPosition, Amount)
     end,
     isAdmin = function(User)
-        return Moonlight.Permissions.HasRole(User.SelenePlayer, "GM")
+        return Interface.Player.IsAdmin(User.SelenePlayer)
     end,
     talk = function(User, Mode, Message, MessageEnglish)
-        Moonlight.Chat.GetChannel("Talk"):SendAs(User, Message)
+        Interface.Chat.Talk(User.SeleneEntity(), Mode, Message, MessageEnglish)
     end,
     sendCharDescription = function(User, ID, Text)
-        Network.SendToPlayer(User.SelenePlayer, "illarion:char_description", ID, Text)
+        Interface.Dialog.ShowCharDescription(User.SelenePlayer, ID, Text)
     end,
     startAction = function(User, Duration, gfxId, gfxInterval, sfxId, sfxInterval)
+        print("startAction", Duration, gfxId, gfxInterval, sfxId, sfxInterval)
         -- TODO We need to get the current "entrypoint" here, i.e. the function the engine called directly that got us here
         -- TODO Play GFX and SFX
         -- TODO User.SeleneEntity():StartAction(Duration)
     end,
     abortAction = function(User)
-        User.SeleneEntity():CancelAction()
+        print("abortAction")
     end,
     successAction = function(User)
-        User.SeleneEntity():CompleteAction()
+        print("completeAction")
     end,
     disturbAction = function(User, Disturber)
-        User.SeleneEntity():CancelAction({
-            CauseEntity = Disturber.SeleneEntity()
-        })
+        print("disturbAction")
     end,
     changeSource = function(User, Item)
-        -- TODO
+        print("changeSource")
     end,
     inform = function(User, Message)
-        User.SelenePlayer:Inform(Message)
+        Interface.Player.Inform(User.SelenePlayer, Message)
     end,
     introduce = function(User)
-        -- TODO introduce
+        print("introduce")
     end,
     move = function(User, Direction, ActiveMove)
         -- TODO ActiveMove??
-        User.SeleneEntity():MoveTowards(Direction)
+        User.SeleneEntity():Move(Direction)
     end,
     turn = function(User, Direction)
         local SeleneDirection = nil
@@ -227,14 +238,15 @@ local CharacterMethods = {
         end
     end,
     getNextStepDir = function(User, Position, OutDir)
-        -- TODO Not used in scripts. Performs a pathfind and returns the first step to take.
+        -- Not used in scripts. Normally performs a pathfind and returns the first step to take, discarding the rest.
+        print("getNextStepDir")
         return false, nil
     end,
     setRace = function(User, Race)
-        User.SeleneEntity():SetCustomData("illarion:race", Race)
+        Interface.Character.SetRace(User.SeleneEntity(), Race)
     end,
     getRace = function(User)
-        return User.SeleneEntity():GetCustomData("illarion:race")
+        return Interface.Character.GetRace(User.SeleneEntity())
     end,
     getFaceTo = function(User)
         local SeleneDirection = User.SeleneEntity().Facing
@@ -251,35 +263,33 @@ local CharacterMethods = {
     end,
     getType = function(User)
         -- TODO Monster/NPC
+        print("getType")
         return Character.player
     end,
     createItem = function(User, ItemID, Count, Quality, Data)
-        -- TODO Items
-        return 0
+        return Interface.Inventory.CreateItem(User.SeleneEntity(), ItemID, Count, Quality, Data)
     end,
     getLoot = function(user)
-        -- TODO Monster Loot
+        print("getLoot")
         return {}
     end,
     increasePoisonValue = function(User, Amount)
-        local prev = User.SeleneEntity():GetAttribute("PoisonValue")
-        User.SeleneEntity():SetAttribute("PoisonValue", prev + Amount)
+        User:setPoisonValue(User:getPoisonValue() + Amount)
     end,
     getPoisonValue = function(User)
-        return User.SeleneEntity():GetAttribute("PoisonValue")
+        return Interface.Attributes.GetPoisonValue(User.SeleneEntity())
     end,
     setPoisonValue = function(User, Value)
-        User.SeleneEntity():SetAttribute("PoisonValue", Value)
+        Interface.Attributes.SetPoisonValue(User.SeleneEntity(), Value)
     end,
     getMentalCapacity = function(User)
-        return User.SeleneEntity():GetAttribute("MentalCapacity")
+        return Interface.Attributes.GetMentalCapacity(User.SeleneEntity())
     end,
     setMentalCapacity = function(User, Value)
-        User.SeleneEntity():SetAttribute("MentalCapacity", Value)
+        Interface.Attributes.SetMentalCapacity(User.SeleneEntity(), Value)
     end,
     increaseMentalCapacity = function(User, Amount)
-        local prev = User.SeleneEntity():GetAttribute("MentalCapacity")
-        User.SeleneEntity():SetAttribute("MentalCapacity", prev + Amount)
+        User:setMentalCapacity(User:getMentalCapacity() + Amount)
     end,
     setClippingActive = function(User, Status)
         User.SeleneEntity():SetNoClip(Status)
@@ -287,36 +297,50 @@ local CharacterMethods = {
     getClippingActive = function(User)
         return User.SeleneEntity():IsNoClip()
     end,
-    countItem = function(user, itemID) return 0 end,
-    countItemAt = function(user, slots, itemID, data) return 0 end,
-    eraseItem = function(user, itemID, count, data) return 0 end,
-    increaseAtPos = function(user, bodyPosition, count) end,
-    swapAtPos = function(user, bodyPosition, itemID, quality) end,
-    createAtPos = function(user, bodyPosition, itemID, count) end,
-    getItemAt = function(user)
-        return Item.fromSeleneEmpty()
+    countItem = function(user, itemID)
+        return Interface.Inventory.CountItem(user.SeleneEntity(), itemID)
     end,
-    getSkillName = function(user, targetSkill) return "" end,
+    countItemAt = function(user, slots, itemID, data)
+        return Interface.Inventory.CountItemAt(user.SeleneEntity(), slots, itemID, data)
+    end,
+    eraseItem = function(user, itemID, count, data)
+        return Interface.Inventory.EraseItem(user.SeleneEntity(), itemID, count, data)
+    end,
+    increaseAtPos = function(user, bodyPosition, count)
+        Interface.Inventory.IncreaseAtPos(user.SeleneEntity(), bodyPosition, count)
+    end,
+    swapAtPos = function(user, bodyPosition, itemID, quality)
+        Interface.Inventory.SwapAtPos(user.SeleneEntity(), bodyPosition, itemID, quality)
+    end,
+    createAtPos = function(user, bodyPosition, itemID, count)
+        Interface.Inventory.CreateAtPos(user.SeleneEntity(), bodyPosition, itemID, count)
+    end,
+    getItemAt = function(user)
+        return Interface.Inventory.GetItemAt(user.SeleneEntity())
+    end,
+    getSkillName = function(user, SkillId)
+        local skill = Registries.FindByMetadata("illarion:skills", "id", SkillId)
+        return skill:GetMetadata("name")
+    end,
     getSkill = function(User, TargetSkill)
-        return User.SeleneEntity():GetSkill(TargetSkill)
+        return Interface.Skills.GetSkill(User.SeleneEntity(), TargetSkill)
     end,
     getMinorSkill = function(User, TargetSkill)
-        return User.SeleneEntity():GetSkillXp(TargetSkill)
+        return Interface.Skills.GetMinorSkill(User.SeleneEntity(), TargetSkill)
     end,
     increaseAttrib = function(User, Attribute, Value)
-        local prev = User.SeleneEntity():GetAttribute(Attribute)
+        local prev = Interface.Attributes.GetAttribute(User.SeleneEntity(), Attribute)
         local new = prev + Value
-        if prev ~= new then
-            User.SeleneEntity():SetAttribute(Attribute, new)
-        end
-        return Value
+        Interface.Attributes.SetAttribute(User.SeleneEntity(), Attribute, new)
+        return new
     end,
     setAttrib = function(User, Attribute, Value)
-        User.SeleneEntity():SetAttribute(Attribute, Value)
+        Interface.Attributes.SetAttribute(User.SeleneEntity(), Attribute, Value)
     end,
     isBaseAttributeValid = function(User, Attribute, Value)
         -- TODO Checks against race data in IllaServer
-        return false
+        print("isBaseAttributeValid")
+        return true
     end,
     getBaseAttributeSum = function(User)
         return User:getBaseAttribute("agility") + User:getBaseAttribute("constitution") +
@@ -325,20 +349,22 @@ local CharacterMethods = {
                User:getBaseAttribute("strength") + User:getBaseAttribute("willpower")
     end,
     getMaxAttributePoints = function(User)
-        return 0 -- TODO Checks against race in IllaServer
+        print("getMaxAttributePoints")
+        return 50 -- TODO Checks against race in IllaServer
     end,
     saveBaseAttributes = function(User)
-        -- TODO IllaServer resets base attributes if sum does not match getMaxAttributePoints
-        -- TODO Not used in scripts, we might just no-op this and include them in regular saving
+        -- TODO IllaServer resets base attributes to those defined in race if sum does not match getMaxAttributePoints
+        -- Not currently used in scripts.
+        print("saveBaseAttributes")
     end,
     getBaseAttribute = function(User, Attribute)
-        return User.SeleneEntity():GetBaseAttribute(Attribute)
+        return Interface.Attributes.GetBaseAttribute(User.SeleneEntity(), Attribute)
     end,
     setBaseAttribute = function(User, Attribute, Value)
         if User:isBaseAttributeValid(Attribute, Value) then
-            User.SeleneEntity():SetBaseAttribute(Attribute, Value)
+            Interface.Attributes.SetBaseAttribute(User.SeleneEntity(), Attribute, Value)
             -- TODO IllaServer syncs health / alive status here too
-            return
+            return true
         end
         return false
      end,
@@ -352,34 +378,53 @@ local CharacterMethods = {
         return false
     end,
     increaseSkill = function(User, TargetSkill, Value)
-        User:IncreaseSkill(TargetSkill, Value)
+        local prev = User:getSkill(TargetSkill)
+        User:setSkill(TargetSkill, prev + Value, User:getMinorSkill(TargetSkill))
     end,
     increaseMinorSkill = function(User, TargetSkill, Value)
-        User:IncreaseSkillXp(TargetSkill, Value)
+        local prev = User:getMinorSkill(TargetSkill)
+        User:setSkill(TargetSkill, User:getSkill(TargetSkill), prev + Value)
     end,
     setSkill = function(User, TargetSkill, Major, Minor)
-        User:SetSkill(TargetSkill, Major)
-        User:SetSkillXp(TargetSkill, Minor)
+        Interface.Skills.SetSkill(User, TargetSkill, Major)
+        Interface.Skills.SetSkillMinor(User, TargetSkill, Minor)
     end,
-    setSkinColour = function(User, SkinColour) end,
-    getSkinColour = function(User) return colour(0, 0, 0) end,
-    setHairColour = function(User, HairColour) end,
-    getHairColour = function(User) return colour(0, 0, 0) end,
-    setHair = function(User, HairID) end,
-    getHair = function(User) return 0 end,
-    setBeard = function(User, BeardID) end,
-    getBeard = function(User) return 0 end,
+    setSkinColour = function(User, SkinColour)
+        Interface.Character.SetSkinColour(User.SeleneEntity(), SkinColour)
+    end,
+    getSkinColour = function(User)
+        return Interface.Character.GetSkinColour(User.SeleneEntity())
+    end,
+    setHairColour = function(User, HairColour)
+        Interface.Character.SetHairColour(User.SeleneEntity(), HairColour)
+    end,
+    getHairColour = function(User)
+        return Interface.Character.GetHairColour(User.SeleneEntity())
+    end,
+    setHair = function(User, HairID)
+        Interface.Character.SetHair(User.SeleneEntity(), HairID)
+    end,
+    getHair = function(User)
+        return Interface.Character.GetHair(User.SeleneEntity())
+    end,
+    setBeard = function(User, BeardID)
+        Interface.Character.SetBeard(User.SeleneEntity(), BeardID)
+    end,
+    getBeard = function(User)
+        return Interface.Character.GetBeard(User.SeleneEntity())
+    end,
     learn = function(User, TargetSkill, ActionPoints, LearnLimit)
-        -- TODO delegate to "learn" script
+        Interface.Skills.Learn(User.SeleneEntity(), TargetSkill, ActionPoints, LearnLimit)
     end,
     getSkillValue = function(User, TargetSkill)
-        return User:GetSkill(TargetSkill)
+        return User:getSkill(TargetSkill)
     end,
     teachMagic = function(User, MagicType, MagicFlag)
         User:setMagicType(MagicType) -- TODO IllaServer only does this if the player has no flags in any magic type
-        local flags = User.SeleneEntity():GetCustomData("illarion:magicFlags" .. MagicType, 0)
+
+        local flags = User:getMagicFlags(MagicType)
         flags = flags | MagicFlag
-        User.SeleneEntity():SetCustomData("illarion:magicFlags" .. MagicType, flags)
+        Interface.Magic.SetMagicFlags(User.SeleneEntity(), MagicType, flags)
     end,
     isInRange = function(User, SecondCharacter, Distance)
         return User:isInRangeToPosition(SecondCharacter.position, Distance)
@@ -400,50 +445,59 @@ local CharacterMethods = {
         return math.max(dx, dy, dz)
     end,
     getMagicType = function(User)
-        return User.SeleneEntity():GetCustomData("illarion:magicType", Character.mage)
+        return Interface.Magic.GetMagicType(User.SeleneEntity())
     end,
     setMagicType = function(User, MagicType)
-        User.SeleneEntity():SetCustomData("illarion:magicType", MagicType)
+        Interface.Magic.SetMagicType(User.SeleneEntity(), MagicType)
     end,
     getMagicFlags = function(User, MagicType)
-        return User.SeleneEntity():GetCustomData("illarion:magicFlags" .. MagicType, 0)
+        return Interface.Magic.GetMagicFlags(User.SeleneEntity(), MagicType)
     end,
     warp = function(User, Pos)
-        User.SeleneEntity():TryTeleport(Pos)
+        -- TODO illa fails this if occupied
+        User.SeleneEntity():SetCoordinate(Pos)
     end,
     forceWarp = function(User, Pos)
-        User.SeleneEntity():Teleport(Pos)
+        User.SeleneEntity():SetCoordinate(Pos)
     end,
     startMusic = function(User, Track)
-        -- TODO How do we handle Music?
+        print("startMusic")
     end,
     defaultMusic = function(User)
-        -- TODO How do we handle Music?
+        print("defaultMusic")
     end,
     callAttackScript = function(User)
-        -- TODO delegate
+        Interface.Combat.CallAttackScript(User.SeleneEntity())
     end,
-    getItemList = function(user, itemID) return {} end,
-    getPlayerLanguage = function(user, id, text) return Player.german end,
-    getBackPack = function(user) return SeleneContainer() end,
-    getDepot = function(User, DepotID) return SeleneContainer() end,
+    getItemList = function(User, ItemID) return Interface.Inventory.GetItemList(User.SeleneEntity(), ItemID) end,
+    getPlayerLanguage = function(User) return Interface.Player.GetLanguage(User.SelenePlayer) end,
+    getBackPack = function(User) return Interface.Inventory.GetBackPack(User.SeleneEntity()) end,
+    getDepot = function(User, DepotID) return Interface.Inventory.GetDepot(User.SeleneEntity(), DepotID) end,
     setQuestProgress = function(User, QuestID, Progress)
-        User.SeleneEntity():SetCustomData("illarion:questProgress" .. QuestID, Progress)
+        Interface.Quests.SetQuestProgress(User.SeleneEntity(), QuestID, Progress)
     end,
     getQuestProgress = function(User, QuestID)
-        return User.SeleneEntity():GetCustomData("illarion:questProgress" .. QuestID, 0)
+        return Interface.Quests.GetQuestProgress(User.SeleneEntity(), QuestID)
     end,
-    getOnRoute = function(User) return false end,
-    setOnRoute = function(User, IsOnRoute) end,
-    getMonsterType = function(User) return 0 end,
-    logAdmin = function(user, message)
-        print("[Admin] " .. message)
+    getOnRoute = function(User)
+        print("getOnRoute")
+        return false
     end,
-    stopAttack = function()
-        User.SeleneEntity():ExitCombat()
+    setOnRoute = function(User, IsOnRoute)
+        print("setOnRoute")
     end,
-    getAttackTarget = function()
-        return User.SeleneEntity():GetCombatTarget()
+    getMonsterType = function(User)
+        print("getMonsterType")
+        return 0
+    end,
+    logAdmin = function(User, Message)
+        Interface.Logger.LogAdmin(User.SelenePlayer, Message)
+    end,
+    stopAttack = function(User)
+        Interface.Combat.StopCombat(User.SeleneEntity())
+    end,
+    getAttackTarget = function(User)
+        return Interface.Combat.GetTarget(User)
     end,
 }
 
@@ -471,6 +525,10 @@ local CharacterMT = {
 
 function Character.fromSelenePlayer(Player)
     return setmetatable({SelenePlayer = Player, SeleneEntity = function() return Player:GetControlledEntity() end}, CharacterMT)
+end
+
+function Character.fromSeleneEntity(Entity)
+    return setmetatable({SeleneEntity = function() return Entity end}, CharacterMT)
 end
 
 function isValidChar(character) 

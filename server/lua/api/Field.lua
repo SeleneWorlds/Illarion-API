@@ -1,4 +1,6 @@
-function SeleneField()
+Field = {}
+
+function Field.fromSelenePosition(Dimension, Position)
     return {
         tile = function() return 0 end,
         countItems = function() return 0 end,

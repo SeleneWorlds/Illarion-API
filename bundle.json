@@ -1,9 +1,10 @@
 {
   "name": "illarion-api",
   "description": "A bridge that implements Illarion lua bindings, allowing native Illarion scripts to run in Selene.",
-  "dependencies": ["moonlight"],
+  "dependencies": [],
   "entrypoints": [
     "server/lua/polyfills.lua",
+    "server/lua/interface.lua",
     "server/lua/api/Action.lua",
     "server/lua/api/ArmorStruct.lua",
     "server/lua/api/Character.lua",

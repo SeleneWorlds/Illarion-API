@@ -1,19 +1,21 @@
-function SeleneItemStruct()
-    return {
-        AgeingSpeed = 0,
-        Brightness = 0,
-        BuyStack = 0,
-        English = "",
-        EnglishDescription = "",
-        German = "",
-        GermanDescription = "",
-        id = 0,
-        Level = 0,
-        MaxStack = 0,
-        ObjectAfterRot = 0,
-        Rareness = 0,
-        rotsInInventory = false,
-        Weight = 0,
-        Worth = 0
-    }
+ItemStruct = {}
+
+function ItemStruct.fromSeleneTileDef(tileDef)
+   return {
+       AgeingSpeed = tonumber(tileDef:GetMetadata("agingSpeed")),
+       Brightness = tonumber(tileDef:GetMetadata("brightness")),
+       BuyStack = tonumber(tileDef:GetMetadata("buyStack")),
+       English = tileDef:GetMetadata("nameEnglish"),
+       EnglishDescription = tileDef:GetMetadata("descriptionEnglish"),
+       German = tileDef:GetMetadata("nameGerman"),
+       GermanDescription = tileDef:GetMetadata("descriptionGerman"),
+       id = tonumber(tileDef:GetMetadata("id")),
+       Level = tonumber(tileDef:GetMetadata("level")),
+       MaxStack = tonumber(tileDef:GetMetadata("maxStack")),
+       ObjectAfterRot = tonumber(tileDef:GetMetadata("objectAfterRot")),
+       Rareness = tonumber(tileDef:GetMetadata("rareness")),
+       rotsInInventory = toboolean(tileDef:GetMetadata("rotsInInventory")),
+       Weight = tonumber(tileDef:GetMetadata("weight")),
+       Worth = tonumber(tileDef:GetMetadata("worth"))
+   }
 end
