@@ -1,6 +1,8 @@
 local Sounds = require("selene.sounds")
 local Registries = require("selene.registries")
 local Dimensions = require("selene.dimensions")
+local Players = require("selene.players")
+local Entities = require("selene.entities")
 
 world = {}
 
@@ -128,7 +130,9 @@ function world:getItemOnField(position)
 end
 
 function world:changeItem(item)
-    print("changeItem")
+    if item.SeleneEntity ~= nil then
+        item.SeleneEntity:UpdateVisuals()
+    end
 end
 
 function world:getPlayersInRangeOf(pos, range)
@@ -174,12 +178,20 @@ function world:erase(item, amount)
 end
 
 function world:gfx(id, pos)
-    print("gfx")
+    local entityType = Registries.FindByMetadata("entities", "gfxId", tostring(id))
+    if entityType == nil then
+        print("No entity for gfx id " .. id) -- TODO throw an error
+        return
+    end
+
+    local entity = Entities.Create(entityType.Name)
+    entity:SetCoordinate(pos)
+    entity:Spawn()
 end
 
 function world:getPlayersOnline()
     local result = {}
-    local players = Server.GetPlayers()
+    local players = Players.GetOnlinePlayers()
     for _, player in ipairs(players) do
         table.insert(result, Character.fromSelenePlayer(player))
     end
