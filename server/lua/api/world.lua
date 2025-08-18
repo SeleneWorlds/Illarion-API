@@ -137,12 +137,12 @@ end
 
 function world:getPlayersInRangeOf(pos, range)
     local dimension = Dimensions.GetDefault()
-    local entities = dimension:GetEntitiesInRange(pos, range)
+    local players = Players.GetOnlinePlayers()
     local result = {}
-    for _, entity in ipairs(entities) do
-        if entity:HasTag("illarion:player") then
-            -- TODO need to get player controlling this entity
-            table.insert(result, Character.fromSeleneEntity(entity))
+    for _, player in ipairs(players) do
+        local entity = player:GetControlledEntity()
+        if entity.Coordinate:GetHorizontalDistance(pos) <= range then
+            table.insert(result, Character.fromSelenePlayer(player))
         end
     end
     return result
