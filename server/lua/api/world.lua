@@ -160,11 +160,11 @@ function world:erase(item, amount)
         end
     elseif item:getType() == scriptItem.inventory or item:getType() == scriptItem.belt then
         local blockedItemId = 228
-        if (item.itempos == Character.right_tool && (item.owner:GetItemAt(Character.left_tool)).id == blockedItemId) {
+        if item.itempos == Character.right_tool and (item.owner:GetItemAt(Character.left_tool)).id == blockedItemId then
             item.owner:increaseAtPos(Character.left_tool, -250);
-        } else if (item.itempos == Character.left_tool && (item.owner:GetItemAt(Character.right_tool)).id == blockedItemId) {
+        elseif item.itempos == Character.left_tool and (item.owner:GetItemAt(Character.right_tool)).id == blockedItemId then
             item.owner:increaseAtPos(Character.right_tool, -250);
-        }
+        end
 
         item.owner:increaseAtPos(item.itempos, -amount);
         return true
