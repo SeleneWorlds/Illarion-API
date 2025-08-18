@@ -184,7 +184,7 @@ function world:gfx(id, pos)
         return
     end
 
-    local entity = Entities.Create(entityType.Name)
+    local entity = Entities.CreateTransient(entityType.Name)
     entity:SetCoordinate(pos)
     entity:Spawn()
 end
