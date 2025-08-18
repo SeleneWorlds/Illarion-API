@@ -88,18 +88,18 @@ function world:getItemStatsFromId(itemId)
     if tile then
         return ItemStruct.fromSeleneTileDef(tile)
     end
-    return nil
+    return ItemStruct.fromSeleneEmpty()
 end
 
 function world:isItemOnField(position)
     local dimension = Dimensions.GetDefault()
-    local tiles = dimension.GetTilesAt(position)
+    local tiles = dimension:GetTilesAt(position)
     for _, tile in ipairs(tiles) do
         if tile:HasTag("illarion:item") then
             return true
         end
     end
-    local entities = dimension.GetEntitiesAt(position)
+    local entities = dimension:GetEntitiesAt(position)
     for _, entity in ipairs(entities) do
         if entity:HasTag("illarion:item") then
             return true
@@ -110,14 +110,14 @@ end
 
 function world:getItemOnField(position)
     local dimension = Dimensions.GetDefault()
-    local entities = dimension.GetEntitiesAt(position)
+    local entities = dimension:GetEntitiesAt(position)
     for _, entity in ipairs(entities) do
         if entity:HasTag("illarion:item") then
             return Item.fromSeleneEntity(entity)
         end
     end
 
-    local tiles = dimension.GetTilesAt(position)
+    local tiles = dimension:GetTilesAt(position)
     for _, tile in ipairs(tiles) do
         if tile:HasTag("illarion:item") then
             return Item.fromSeleneTile(tile)
@@ -133,7 +133,7 @@ end
 
 function world:getPlayersInRangeOf(pos, range)
     local dimension = Dimensions.GetDefault()
-    local entities = dimension.GetEntitiesInRange(pos, range)
+    local entities = dimension:GetEntitiesInRange(pos, range)
     local result = {}
     for _, entity in ipairs(entities) do
         if entity:HasTag("illarion:player") then
@@ -234,7 +234,7 @@ end
 
 function world:isCharacterOnField(pos)
     local dimension = Dimensions.GetDefault()
-    local entities = dimension.GetEntitiesAt(pos)
+    local entities = dimension:GetEntitiesAt(pos)
     for _, entity in ipairs(entities) do
         if entity:HasTag("illarion:player") then
             return true
