@@ -30,7 +30,7 @@ m.Combat = {
     GetTarget = function(user) return nil end,
     GetFightPoints = function(user) return 0 end,
     SetFightPoints = function(user, value) end,
-    CallAttackScript = function(user) end
+    CallAttackScript = function(attacker, defender) end
 }
 
 m.Inventory = {
