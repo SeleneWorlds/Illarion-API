@@ -240,9 +240,7 @@ local CharacterMethods = {
         return Character.north
     end,
     getType = function(user)
-        -- TODO Monster/NPC
-        print("getType")
-        return Character.player
+        return Interface.Character.GetType(user)
     end,
     createItem = function(user, itemId, count, quality, data)
         return Interface.Inventory.CreateItem(user, itemId, count, quality, data)

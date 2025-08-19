@@ -60,6 +60,7 @@ m.Attributes = {
 }
 
 m.Character = {
+    GetType = function(user) return Character.player end,
     SetRace = function(user, raceId) end,
     GetRace = function(user) return 0 end,
     GetSkinColor = function(user) return colour(255, 255, 255) end,
