@@ -190,8 +190,8 @@ local CharacterMethods = {
     changeSource = function(user, item)
         print("changeSource")
     end,
-    inform = function(user, message)
-        Interface.Player.Inform(user, message)
+    inform = function(user, message, messageEnglish, priority)
+        Interface.Player.Inform(user, message, messageEnglish, priority)
     end,
     introduce = function(user)
         print("introduce")
