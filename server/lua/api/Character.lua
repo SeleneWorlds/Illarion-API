@@ -146,7 +146,7 @@ local CharacterMethods = {
         Interface.Dialog.ShowCrafting(user, dialog)
     end,
     idleTime = function(user)
-        return user.SelenePlayer:GetIdleTime()
+        return user.SelenePlayer.IdleTime
     end,
     sendBook = function(user, bookId)
         Interface.Dialog.ShowBook(user, bookId)
@@ -509,7 +509,7 @@ local CharacterMT = {
 }
 
 function Character.fromSelenePlayer(player)
-    return setmetatable({SelenePlayer = player, SeleneEntity = function() return player:GetControlledEntity() end}, CharacterMT)
+    return setmetatable({SelenePlayer = player, SeleneEntity = function() return player.ControlledEntity end}, CharacterMT)
 end
 
 function Character.fromSeleneEntity(entity)

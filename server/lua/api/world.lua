@@ -140,7 +140,7 @@ function world:getPlayersInRangeOf(pos, range)
     local players = Players.GetOnlinePlayers()
     local result = {}
     for _, player in ipairs(players) do
-        local entity = player:GetControlledEntity()
+        local entity = player.ControlledEntity
         if entity.Coordinate:GetHorizontalDistance(pos) <= range then
             table.insert(result, Character.fromSelenePlayer(player))
         end
