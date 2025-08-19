@@ -1,4 +1,3 @@
-local Registries = require("selene.registries")
 local Interface = require("illarion-api.server.lua.interface")
 
 Character = {
@@ -69,24 +68,6 @@ Character = {
     mediumPriority = 101,
     highPriority = 102,
 }
-
-local allRaces = Registries.FindAll("illarion:races")
-for _, Race in ipairs(allRaces) do
-    local name = Race:GetMetadata("name")
-    local id = Race:GetMetadata("id")
-    if name and id then
-        Character[name] = tonumber(id)
-    end
-end
-
-local allSkills = Registries.FindAll("illarion:skills")
-for _, Skill in ipairs(allSkills) do
-    local name = Skill:GetMetadata("name")
-    local id = Skill:GetMetadata("id")
-    if name and id then
-        Character[name] = tonumber(id)
-    end
-end
 
 local CharacterGetters = {
     lastSpokenText = function(User)
@@ -317,8 +298,7 @@ local CharacterMethods = {
         return Interface.Inventory.GetItemAt(user.SeleneEntity())
     end,
     getSkillName = function(user, SkillId)
-        local skill = Registries.FindByMetadata("illarion:skills", "id", SkillId)
-        return skill:GetMetadata("name")
+        return Interface.Skills.GetSkillName(SkillId)
     end,
     getSkill = function(User, TargetSkill)
         return Interface.Skills.GetSkill(User.SeleneEntity(), TargetSkill)

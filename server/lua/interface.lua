@@ -78,8 +78,9 @@ m.Magic = {
 }
 
 m.Skills = {
+    GetSkillName = function(SkillID) return "" end,
     GetSkill = function(Entity, SkillID) return 0 end,
-    GetMinorSkill = function(Entity, SkillID) return 0 end
+    GetMinorSkill = function(Entity, SkillID) return 0 end,
 }
 
 m.Quests = {
