@@ -116,9 +116,10 @@ m.LTE = {
 }
 
 m.Logger = {
-    LogAdmin = function(user, message)
-        print("[Admin] " .. message)
-    end
+    Log = function(message) end,
+    LogDebug = function(message) end,
+    LogError = function(message) end,
+    LogAdmin = function(user, message) end
 }
 
 return m

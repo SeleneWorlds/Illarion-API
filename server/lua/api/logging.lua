@@ -1,11 +1,13 @@
+local Interface = require("illarion-api.server.lua.interface")
+
 function log(message)
-    print("[Log] " .. message)
+    Interface.Logger.Log(message)
 end
 
 function debug(message)
-    print("[Debug] " .. message)
+    Interface.Logger.LogDebug(message)
 end
 
 function error(message)
-    print("[Error] " .. message)
+    Interface.Logger.LogError(message)
 end
