@@ -1,100 +1,105 @@
 local m = {}
 
 m.Chat = {
-    Talk = function(Entity, Message) end,
-    GetLastSpokenText = function(Entity) return "" end,
-    SetLanguage = function(Entity, Language) end,
-    GetLanguage = function(Entity) return 0 end
+    Talk = function(user, mode, message, messageEnglish) end,
+    GetLastSpokenText = function(user) return "" end,
+    SetLanguage = function(user, language) end,
+    GetLanguage = function(user) return 0 end
 }
 
 m.Dialog = {
-    RequestInput = function(Player, Dialog) end,
-    ShowMessage = function(Player, Dialog) end,
-    RequestSelection = function(Player, Dialog) end,
-    ShowMerchant = function(Player, Dialog) end,
-    ShowCrafting = function(Player, Dialog) end,
-    ShowBook = function(Player, BookID) end,
-    ShowCharDescription = function(Player, CharID, Text) end
+    RequestInput = function(user, dialog) end,
+    ShowMessage = function(user, dialog) end,
+    RequestSelection = function(user, dialog) end,
+    ShowMerchant = function(user, dialog) end,
+    ShowCrafting = function(user, dialog) end,
+    ShowBook = function(user, bookId) end,
+    ShowCharDescription = function(user, charID, message) end
 }
 
 m.Movement = {
-    GetMovePoints = function(Entity) return 0 end,
-    GetSpeed = function(Entity) return 0 end,
-    SetMovePoints = function(Entity, Value) end,
-    SetSpeed = function(Entity, Value) end
+    GetMovePoints = function(user) return 0 end,
+    GetSpeed = function(user) return 0 end,
+    SetMovePoints = function(user, value) end,
+    SetSpeed = function(user, value) end
 }
 
 m.Combat = {
-    IsInCombat = function(Entity) return false end,
-    StopCombat = function(Entity) end,
-    GetTarget = function(Entity) return nil end,
-    GetFightPoints = function(Entity) return 0 end,
-    SetFightPoints = function(Entity, Value) end,
-    CallAttackScript = function(Entity) end
+    IsInCombat = function(user) return false end,
+    StopCombat = function(user) end,
+    GetTarget = function(user) return nil end,
+    GetFightPoints = function(user) return 0 end,
+    SetFightPoints = function(user, value) end,
+    CallAttackScript = function(user) end
 }
 
 m.Inventory = {
-    ChangeQualityAt = function(Entity, BodyPosition, Amount) end,
-    CountItem = function(Entity, ItemID) return 0 end,
-    CountItemAt = function(Entity, Slots, ItemID, Data) return 0 end,
-    EraseItem = function(Entity, ItemID, Count, Data) end,
-    IncreaseAtPos = function(Entity, BodyPosition, Count) end,
-    SwapAtPos = function(Entity, BodyPosition, ItemID, Quality) end,
-    CreateItem = function(Entity, ItemID, Count, Quality, Data) return 0 end,
-    CreateAtPos = function(Entity, BodyPosition, ItemID, Count) end,
-    GetItemAt = function(Entity, BodyPosition) return Item.fromSeleneEmpty() end,
-    GetItem = function(Entity, ItemID, Data) return Item.fromSeleneEmpty() end,
-    GetBackpack = function(Entity) return SeleneContainer() end,
-    GetDepot = function(Entity, DepotID) return SeleneContainer() end
+    ChangeQualityAt = function(user, bodyPosition, amount) end,
+    CountItem = function(user, itemId) return 0 end,
+    CountItemAt = function(user, slots, itemId, data) return 0 end,
+    EraseItem = function(user, itemId, count, data) end,
+    IncreaseAtPos = function(user, bodyPosition, count) end,
+    SwapAtPos = function(user, bodyPosition, itemId, quality) end,
+    CreateItem = function(user, itemId, count, quality, data) return 0 end,
+    CreateAtPos = function(user, bodyPosition, itemId, count) end,
+    GetItemAt = function(user, bodyPosition) return Item.fromSeleneEmpty() end,
+    GetItem = function(user, itemId, data) return Item.fromSeleneEmpty() end,
+    GetBackpack = function(user) return SeleneContainer() end,
+    GetDepot = function(user, depotId) return SeleneContainer() end
 }
 
 m.Attributes = {
-    GetAttribute = function(Entity, AttributeID) return 0 end,
-    SetAttribute = function(Entity, AttributeID, Value) end,
-    GetPoisonValue = function(Entity) return 0 end,
-    SetPoisonValue = function(Entity, Value) end,
-    GetMentalCapacity = function(Entity) return 0 end,
-    SetMentalCapacity = function(Entity, Value) end,
+    GetAttribute = function(user, attribute) return 0 end,
+    SetAttribute = function(user, attribute, value) end,
+    GetBaseAttribute = function(user, attribute) return 0 end,
+    SetBaseAttribute = function(user, attribute, value) end,
+    GetPoisonValue = function(user) return 0 end,
+    SetPoisonValue = function(user, value) end,
+    GetMentalCapacity = function(user) return 0 end,
+    SetMentalCapacity = function(user, value) end,
 }
 
 m.Character = {
-    SetRace = function(Entity, RaceID) end,
-    GetRace = function(Entity) return 0 end,
-    GetSkinColour = function(Entity) return colour(255, 255, 255) end,
-    SetSkinColour = function(Entity, Colour) end,
-    GetHairColour = function(Entity) return colour(255, 255, 255) end,
-    SetHairColour = function(Entity, Colour) end,
-    GetHair = function(Entity) return 0 end,
-    SetHair = function(Entity, HairID) end,
-    GetBeard = function(Entity) return 0 end,
-    SetBeard = function(Entity, BeardID) end
+    SetRace = function(user, raceId) end,
+    GetRace = function(user) return 0 end,
+    GetSkinColor = function(user) return colour(255, 255, 255) end,
+    SetSkinColor = function(user, skinColor) end,
+    GetHairColor = function(user) return colour(255, 255, 255) end,
+    SetHairColor = function(user, hairColor) end,
+    GetHair = function(user) return 0 end,
+    SetHair = function(user, hairId) end,
+    GetBeard = function(user) return 0 end,
+    SetBeard = function(user, beardId) end
 }
 
 m.Magic = {
-    GetMagicType = function(Entity) return 0 end,
-    SetMagicType = function(Entity, MagicType) end,
-    GetMagicFlags = function(Entity, MagicType) return 0 end,
-    SetMagicFlags = function(Entity, MagicType, Flags) end
+    GetMagicType = function(user) return 0 end,
+    SetMagicType = function(user, magicType) end,
+    GetMagicFlags = function(user, magicType) return 0 end,
+    SetMagicFlags = function(user, magicType, flags) end
 }
 
 m.Skills = {
-    GetSkillName = function(SkillID) return "" end,
-    GetSkill = function(Entity, SkillID) return 0 end,
-    GetMinorSkill = function(Entity, SkillID) return 0 end,
+    GetSkillName = function(skillId) return "" end,
+    GetSkill = function(user, skillId) return 0 end,
+    GetMinorSkill = function(user, skillId) return 0 end,
+    SetSkill = function(user, skillId, major) end,
+    SetSkillMinor = function(user, skillId, minor) end,
+    Learn = function(user, skillId, actionPoints, learnLimit) end
 }
 
 m.Quests = {
-    GetQuestProgress = function(Entity, QuestID) return 0 end,
-    SetQuestProgress = function(Entity, QuestID, Progress) end
+    GetQuestProgress = function(user, questId) return 0 end,
+    SetQuestProgress = function(user, questId, progress) end
 }
 
 m.Player = {
-    Inform = function(Player, Message) end,
-    PageGM = function(Player, Text) end,
-    IsAdmin = function(Player) return false end,
-    GetLanguage = function(Player) return 0 end,
-    GetTotalOnlineTime = function(Player) return 0 end,
-    GetID = function(Player) return 0 end
+    Inform = function(user, message) end,
+    PageGM = function(user, message) end,
+    IsAdmin = function(user) return false end,
+    GetLanguage = function(user) return 0 end,
+    GetTotalOnlineTime = function(user) return 0 end,
+    GetID = function(user) return 0 end
 }
 
 m.LTE = {
@@ -111,8 +116,8 @@ m.LTE = {
 }
 
 m.Logger = {
-    LogAdmin = function(Player, Message)
-        print("[Admin] " .. Message)
+    LogAdmin = function(user, message)
+        print("[Admin] " .. message)
     end
 }
 
