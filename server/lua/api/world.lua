@@ -86,7 +86,7 @@ function world:getTime(timeType)
 end
 
 function world:getItemStatsFromId(itemId)
-    local tile = Registries.FindByMetadata("tiles", "id", tostring(itemId))
+    local tile = Registries.FindByMetadata("tiles", "itemId", itemId)
     if tile then
         return ItemStruct.fromSeleneTileDef(tile)
     end
@@ -149,7 +149,7 @@ function world:getPlayersInRangeOf(pos, range)
 end
 
 function world:erase(item, amount)
-    local TileDef = Registries.FindByMetadata("tiles", "id", tostring(item.id))
+    local TileDef = Registries.FindByMetadata("tiles", "itemId", item.id)
     if TileDef == nil then
         print("No such tile " .. item.id) -- TODO throw an error
         return
@@ -178,7 +178,7 @@ function world:erase(item, amount)
 end
 
 function world:gfx(id, pos)
-    local entityType = Registries.FindByMetadata("entities", "gfxId", tostring(id))
+    local entityType = Registries.FindByMetadata("entities", "gfxId", id)
     if entityType == nil then
         print("No entity for gfx id " .. id) -- TODO throw an error
         return
@@ -199,7 +199,7 @@ function world:getPlayersOnline()
 end
 
 function world:swap(item, newId, newQuality)
-    local NewTileDef = Registries.FindByMetadata("tiles", "id", tostring(newId))
+    local NewTileDef = Registries.FindByMetadata("tiles", "itemId", newId)
     if NewTileDef == nil then
         print("No such tile " .. newId) -- TODO throw an error
         return
@@ -218,14 +218,14 @@ function world:swap(item, newId, newQuality)
 end
 
 function world:makeSound(soundId, pos)
-    local sound = Registries.FindByMetadata("illarion:sounds", "id", tostring(soundId))
+    local sound = Registries.FindByMetadata("illarion:sounds", "soundId", soundId)
     if sound ~= nil then
         Sounds.PlaySoundAt(pos.x, pos.y, pos.z, sound.Name)
     end
 end
 
 function world:getItemName(ItemId, Language)
-    local tile = Registries.FindByMetadata("tiles", "id", tostring(ItemId))
+    local tile = Registries.FindByMetadata("tiles", "itemId", ItemId)
     if tile then
         if Language == Player.german then
             return tile:GetMetadata("nameGerman")

@@ -9,7 +9,7 @@ function ItemStruct.fromSeleneTileDef(tileDef)
        EnglishDescription = tileDef:GetMetadata("descriptionEnglish"),
        German = tileDef:GetMetadata("nameGerman"),
        GermanDescription = tileDef:GetMetadata("descriptionGerman"),
-       id = tonumber(tileDef:GetMetadata("id") or 0),
+       id = tonumber(tileDef:GetMetadata("itemId") or 0),
        Level = tonumber(tileDef:GetMetadata("level") or 0),
        MaxStack = tonumber(tileDef:GetMetadata("maxStack") or 0),
        ObjectAfterRot = tonumber(tileDef:GetMetadata("objectAfterRot") or 0),

@@ -1,4 +1,5 @@
 local Interface = require("illarion-api.server.lua.interface")
+local DirectionUtils = require("illarion-api.server.lua.lib.directionUtils")
 
 Character = {
     -- body_pos
@@ -201,16 +202,7 @@ local CharacterMethods = {
         user.SeleneEntity():Move(direction)
     end,
     turn = function(user, direction)
-        local seleneDirection = nil
-        if direction == Character.north then
-            seleneDirection = "north"
-        elseif direction == Character.south then
-            seleneDirection = "south"
-        elseif direction == Character.east then
-            seleneDirection = "east"
-        elseif direction == Character.west then
-            seleneDirection = "west"
-        end
+        local seleneDirection = DirectionUtils.IllaToSelene(direction)
         if seleneDirection then
             user.SeleneEntity():SetFacing(seleneDirection)
         end
@@ -227,17 +219,7 @@ local CharacterMethods = {
         return Interface.Character.GetRace(user)
     end,
     getFaceTo = function(user)
-        local seleneDirection = user.SeleneEntity().Facing
-        if seleneDirection == "north" then
-            return Character.north
-        elseif seleneDirection == "south" then
-            return Character.south
-        elseif seleneDirection == "east" then
-            return Character.east
-        elseif seleneDirection == "west" then
-            return Character.west
-        end
-        return Character.north
+        return DirectionUtils.SeleneToIlla(user.SeleneEntity().Facing) or Character.north
     end,
     getType = function(user)
         return Interface.Character.GetType(user)

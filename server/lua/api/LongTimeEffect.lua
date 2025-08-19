@@ -10,7 +10,7 @@ setmetatable(LongTimeEffect, {
 
 local LongTimeEffectGetters = {
     effectId = function(effect)
-        return tonumber(effect.SeleneEffectDefinition:GetMetadata("id"))
+        return tonumber(effect.SeleneEffectDefinition:GetMetadata("lteId"))
     end,
     effectName = function(effect)
         return effect.SeleneEffectDefinition:GetMetadata("name")
