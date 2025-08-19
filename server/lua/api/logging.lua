@@ -4,9 +4,11 @@ function log(message)
     Interface.Logger.Log(message)
 end
 
-function debug(message)
-    Interface.Logger.LogDebug(message)
-end
+setmetatable(debug, {
+    __call = function(_, message)
+        Interface.Logger.LogDebug(message)
+    end
+})
 
 function error(message)
     Interface.Logger.LogError(message)
