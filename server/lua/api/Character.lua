@@ -397,7 +397,17 @@ local CharacterMethods = {
         return user:getSkill(skill)
     end,
     teachMagic = function(user, magicType, magicFlag)
-        user:setMagicType(magicType) -- TODO IllaServer only does this if the player has no flags in any magic type
+        local anyFlags = false
+        for i = 0, 4 do
+            if user:getMagicFlags(i) ~= 0 then
+                anyFlags = true
+                break
+            end
+        end
+
+        if not anyFlags then
+            user:setMagicType(magicType)
+        end
 
         local flags = user:getMagicFlags(magicType)
         flags = flags | magicFlag
@@ -443,8 +453,8 @@ local CharacterMethods = {
     defaultMusic = function(user)
         print("defaultMusic")
     end,
-    callAttackScript = function(user)
-        Interface.Combat.CallAttackScript(user)
+    callAttackScript = function(attacker, defender)
+        Interface.Combat.CallAttackScript(attacker, defender)
     end,
     getItemList = function(user, itemId) return Interface.Inventory.GetItemList(user, itemId) end,
     getPlayerLanguage = function(user) return Interface.Player.GetLanguage(user) end,
