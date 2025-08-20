@@ -218,7 +218,7 @@ function world:swap(item, newId, newQuality)
 end
 
 function world:makeSound(soundId, pos)
-    local sound = Registries.FindByMetadata("illarion:sounds", "soundId", soundId)
+    local sound = Registries.FindByMetadata("sounds", "soundId", soundId)
     if sound ~= nil then
         Sounds.PlaySoundAt(pos.x, pos.y, pos.z, sound.Name)
     end
