@@ -1,17 +1,4 @@
-local Registries = require("selene.registries")
-
 Item = {}
-
-local allTiles = Registries.FindAll("tiles")
-for _, Tile in ipairs(allTiles) do
-    if string.startsWith(Tile.Name, "illarion:item_") then
-        local name = Tile:GetMetadata("name")
-        local id = Tile:GetMetadata("itemId")
-        if name and id then
-            Item[name] = tonumber(id)
-        end
-    end
-end
 
 scriptItem = {
     notdefined = 0,
