@@ -86,9 +86,25 @@ function world:getTime(timeType)
 end
 
 function world:getItemStatsFromId(itemId)
-    local tile = Registries.FindByMetadata("tiles", "itemId", itemId)
-    if tile then
-        return ItemStruct.fromSeleneTileDef(tile)
+    local itemDef = Registries.FindByMetadata("illarion:items", "id", itemId)
+    if itemDef then
+        return {
+          AgeingSpeed = tonumber(itemDef:GetField("agingSpeed") or 0),
+          Brightness = tonumber(itemDef:GetField("brightness") or 0),
+          BuyStack = tonumber(itemDef:GetField("buyStack") or 0),
+          English = itemDef:GetField("nameEnglish"),
+          EnglishDescription = itemDef:GetField("descriptionEnglish"),
+          German = itemDef:GetField("nameGerman"),
+          GermanDescription = itemDef:GetField("descriptionGerman"),
+          id = tonumber(itemDef:GetField("itemId") or 0),
+          Level = tonumber(itemDef:GetField("level") or 0),
+          MaxStack = tonumber(itemDef:GetField("maxStack") or 0),
+          ObjectAfterRot = tonumber(itemDef:GetField("objectAfterRot") or 0),
+          Rareness = tonumber(itemDef:GetField("rareness") or 0),
+          rotsInInventory = itemDef:GetField("rotsInInventory"),
+          Weight = tonumber(itemDef:GetField("weight") or 0),
+          Worth = tonumber(itemDef:GetField("worth") or 0)
+        }
     end
     return ItemStruct.fromSeleneEmpty()
 end
