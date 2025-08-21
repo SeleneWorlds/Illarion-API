@@ -9,6 +9,14 @@ function m.IllaToSelene(direction)
         return "east"
     elseif direction == Character.west then
         return "west"
+    elseif direction == Character.northeast then
+        return "northeast"
+    elseif direction == Character.northwest then
+        return "northwest"
+    elseif direction == Character.southeast then
+        return "southeast"
+    elseif direction == Character.southwest then
+        return "southwest"
     end
 end
 
@@ -21,6 +29,14 @@ function m.SeleneToIlla(direction)
         return Character.east
     elseif direction == "west" then
         return Character.west
+    elseif direction == "northeast" then
+        return Character.northeast
+    elseif direction == "northwest" then
+        return Character.northwest
+    elseif direction == "southeast" then
+        return Character.southeast
+    elseif direction == "southwest" then
+        return Character.southwest
     end
 end
 
