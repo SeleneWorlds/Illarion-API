@@ -106,7 +106,7 @@ function world:getItemStatsFromId(itemId)
           Worth = tonumber(itemDef:GetField("worth") or 0)
         }
     end
-    return ItemStruct.fromSeleneEmpty()
+    return ItemStruct()
 end
 
 function world:isItemOnField(position)
