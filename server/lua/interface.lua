@@ -49,14 +49,18 @@ m.Inventory = {
 }
 
 m.Attributes = {
-    GetAttribute = function(user, attribute) return 0 end,
-    SetAttribute = function(user, attribute, value) end,
+    GetAttributeOffset = function(user, attribute) return 0 end,
+    SetAttributeOffset = function(user, attribute, value) end,
     GetBaseAttribute = function(user, attribute) return 0 end,
     SetBaseAttribute = function(user, attribute, value) end,
     GetPoisonValue = function(user) return 0 end,
     SetPoisonValue = function(user, value) end,
     GetMentalCapacity = function(user) return 0 end,
     SetMentalCapacity = function(user, value) end,
+    HandleAttributeChange = function(user, attribute) end,
+    ClampAttribute = function(user, attribute, value) return value end,
+    IsBaseAttributeValid = function(user, attribute, value) return true end,
+    GetMaxAttributePoints = function(user) return 0 end
 }
 
 m.Character = {

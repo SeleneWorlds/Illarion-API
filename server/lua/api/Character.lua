@@ -286,50 +286,83 @@ local CharacterMethods = {
         return Interface.Skills.GetMinorSkill(user, skillId)
     end,
     increaseAttrib = function(user, attribute, value)
-        local prev = Interface.Attributes.GetAttribute(user, attribute)
-        local new = prev + value
-        Interface.Attributes.SetAttribute(user, attribute, new)
+        if attribute == "sex" then
+            return Interface.Attributes.GetSex(user)
+        end
+
+        local baseValue = Interface.Attributes.GetBaseAttribute(user, attribute)
+        local offset = Interface.Attributes.GetAttributeOffset(user, attribute)
+        local prev = Interface.Attributes.ClampAttribute(user, attribute, baseValue + offset)
+        local new = Interface.Attributes.ClampAttribute(user, attribute, prev + value)
+        if prev ~= new then
+            if baseValue == 0 then
+                Interface.Attributes.SetBaseAttribute(user, attribute, new)
+                Interface.Attributes.SetAttributeOffset(user, attribute, 0)
+            else
+                Interface.Attributes.SetAttributeOffset(user, attribute, new - baseValue)
+            end
+            Interface.Attributes.HandleAttributeChange(user, attribute)
+        end
         return new
     end,
     setAttrib = function(user, attribute, value)
-        Interface.Attributes.SetAttribute(user, attribute, value)
+        local baseValue = Interface.Attributes.GetBaseAttribute(user, attribute)
+        local offset = Interface.Attributes.GetAttributeOffset(user, attribute)
+        local prev = Interface.Attributes.ClampAttribute(user, attribute, baseValue + offset)
+        local new = Interface.Attributes.ClampAttribute(user, attribute, value)
+        if prev ~= new then
+            if baseValue == 0 then
+                Interface.Attributes.SetBaseAttribute(user, attribute, new)
+                Interface.Attributes.SetAttributeOffset(user, attribute, 0)
+            else
+                Interface.Attributes.SetAttributeOffset(user, attribute, new - baseValue)
+            end
+            Interface.Attributes.HandleAttributeChange(user, attribute)
+        end
     end,
     isBaseAttributeValid = function(user, attribute, value)
-        -- TODO Checks against race data in IllaServer
-        print("isBaseAttributeValid")
-        return true
+        return Interface.Attributes.IsBaseAttributeValid(user, attribute, value)
     end,
     getBaseAttributeSum = function(user)
-        return user:getBaseAttribute("agility") + user:getBaseAttribute("constitution") +
-               user:getBaseAttribute("dexterity") + user:getBaseAttribute("essence") +
-               user:getBaseAttribute("intelligence") + user:getBaseAttribute("perception") +
-               user:getBaseAttribute("strength") + user:getBaseAttribute("willpower")
+        return Interface.Attributes.GetBaseAttribute(user, "agility") + Interface.Attributes.GetBaseAttribute(user, "constitution") +
+               Interface.Attributes.GetBaseAttribute(user, "dexterity") + Interface.Attributes.GetBaseAttribute(user, "essence") +
+               Interface.Attributes.GetBaseAttribute(user, "intelligence") + Interface.Attributes.GetBaseAttribute(user, "perception") +
+               Interface.Attributes.GetBaseAttribute(user, "strength") + Interface.Attributes.GetBaseAttribute(user, "willpower")
     end,
     getMaxAttributePoints = function(user)
-        print("getMaxAttributePoints")
-        return 50 -- TODO Checks against race in IllaServer
+        return Interface.Attributes.GetMaxAttributePoints(user)
     end,
     saveBaseAttributes = function(user)
-        -- TODO IllaServer resets base attributes to those defined in race if sum does not match getMaxAttributePoints
-        -- Not currently used in scripts.
-        print("saveBaseAttributes")
+        -- Normally, this function would rollback all base attributes if the sum surpasses the maximum.
+        -- However, I find that behaviour insane so I will not implement it.
+        -- TODO Still, we currently always save changes to base attributes as they happen,
+        --      which is reasonable, but diverges from the original behaviour of changes being temporary until saved.
+        return true
     end,
     getBaseAttribute = function(user, attribute)
         return Interface.Attributes.GetBaseAttribute(user, attribute)
     end,
     setBaseAttribute = function(user, attribute, value)
-        if user:isBaseAttributeValid(attribute, value) then
-            Interface.Attributes.SetBaseAttribute(user, attribute, value)
-            -- TODO IllaServer syncs health / alive status here too
+        if Interface.Attributes.isBaseAttributeValid(user, attribute, value) then
+            local prev = Interface.Attributes.GetBaseAttribute(user, attribute)
+            local new = Interface.Attributes.ClampAttribute(user, attribute, value)
+            if prev ~= new then
+                Interface.Attributes.SetBaseAttribute(user, attribute, new)
+                Interface.Attributes.HandleAttributeChange(user, attribute)
+            end
             return true
         end
         return false
      end,
     increaseBaseAttribute = function(user, attribute, amount)
-        local new = user:getBaseAttribute(attribute) + amount
-        if user:isBaseAttributeValid(attribute, new) then
-            user:setBaseAttribute(attribute, new)
-            -- TODO IllaServer syncs health / alive status here too
+        local prev = Interface.Attributes.GetBaseAttribute(user, attribute)
+        local new + amount
+        if Interface.Attributes.isBaseAttributeValid(user, attribute, new) then
+            new = Interface.Attributes.ClampAttribute(user, attribute, new)
+            if prev ~= new then
+                Interface.Attributes.SetBaseAttribute(user, attribute, new)
+                Interface.Attributes.HandleAttributeChange(user, attribute)
+            end
             return true
         end
         return false
