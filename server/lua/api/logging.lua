@@ -9,7 +9,3 @@ setmetatable(debug, {
         Interface.Logger.LogDebug(message)
     end
 })
-
-function error(message)
-    Interface.Logger.LogError(message)
-end
