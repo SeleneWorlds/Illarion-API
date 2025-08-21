@@ -72,6 +72,7 @@ Character = {
 
 local CharacterGetters = {
     lastSpokenText = function(user)
+        -- TODO remember to set last spoken text once chat is implemented
         return Interface.Chat.GetLastSpokenText(user)
     end,
     effects = function(user) return {
@@ -82,15 +83,22 @@ local CharacterGetters = {
             return Interface.LTE.FindEffect(user, idOrName)
         end,
         removeEffect = function(self, idOrNameOrEffect)
-            Interface.LTE.RemoveEffect(user, idOrNameOrEffect)
+            local effect = idOrNameOrEffect
+            if type(idOrNameOrEffect) == "number" or type(idOrNameOrEffect) == "string" then
+                effect = self:find(idOrNameOrEffect)
+            end
+            if not effect then
+                return false
+            end
+            return Interface.LTE.RemoveEffect(user, effect)
         end
     } end,
     waypoints = function(user) return {
         addWaypoint = function(waypoint)
-            print("waypoints.addWaypoint", waypoint)
+            print("waypoints.addWaypoint", waypoint) -- TODO Waypoints
         end,
         clear = function()
-           print("waypoints.clear")
+           print("waypoints.clear") -- TODO Waypoints
         end
     } end,
     pos = function(user)
@@ -531,6 +539,6 @@ function Character.fromSeleneEntity(entity)
     return setmetatable({SeleneEntity = function() return entity end}, CharacterMT)
 end
 
-function isValidChar(character) 
-    return true 
+function isValidChar(character)
+    return true
 end
