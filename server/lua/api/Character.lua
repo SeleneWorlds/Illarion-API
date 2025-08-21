@@ -298,7 +298,7 @@ local CharacterMethods = {
             return Interface.Attributes.GetSex(user)
         end
 
-        local baseValue = Interface.Attributes.GetBaseAttribute(user, attribute)
+        local baseValue = Interface.Attributes.GetTransientBaseAttribute(user, attribute)
         local offset = Interface.Attributes.GetAttributeOffset(user, attribute)
         local prev = Interface.Attributes.ClampAttribute(user, attribute, baseValue + offset)
         local new = Interface.Attributes.ClampAttribute(user, attribute, prev + value)
@@ -314,7 +314,7 @@ local CharacterMethods = {
         return new
     end,
     setAttrib = function(user, attribute, value)
-        local baseValue = Interface.Attributes.GetBaseAttribute(user, attribute)
+        local baseValue = Interface.Attributes.GetTransientBaseAttribute(user, attribute)
         local offset = Interface.Attributes.GetAttributeOffset(user, attribute)
         local prev = Interface.Attributes.ClampAttribute(user, attribute, baseValue + offset)
         local new = Interface.Attributes.ClampAttribute(user, attribute, value)
@@ -332,27 +332,44 @@ local CharacterMethods = {
         return Interface.Attributes.IsBaseAttributeValid(user, attribute, value)
     end,
     getBaseAttributeSum = function(user)
-        return Interface.Attributes.GetBaseAttribute(user, "agility") + Interface.Attributes.GetBaseAttribute(user, "constitution") +
-               Interface.Attributes.GetBaseAttribute(user, "dexterity") + Interface.Attributes.GetBaseAttribute(user, "essence") +
-               Interface.Attributes.GetBaseAttribute(user, "intelligence") + Interface.Attributes.GetBaseAttribute(user, "perception") +
-               Interface.Attributes.GetBaseAttribute(user, "strength") + Interface.Attributes.GetBaseAttribute(user, "willpower")
+        return Interface.Attributes.GetTransientBaseAttribute(user, "agility") + Interface.Attributes.GetTransientBaseAttribute(user, "constitution") +
+               Interface.Attributes.GetTransientBaseAttribute(user, "dexterity") + Interface.Attributes.GetTransientBaseAttribute(user, "essence") +
+               Interface.Attributes.GetTransientBaseAttribute(user, "intelligence") + Interface.Attributes.GetTransientBaseAttribute(user, "perception") +
+               Interface.Attributes.GetTransientBaseAttribute(user, "strength") + Interface.Attributes.GetTransientBaseAttribute(user, "willpower")
     end,
     getMaxAttributePoints = function(user)
         return Interface.Attributes.GetMaxAttributePoints(user)
     end,
     saveBaseAttributes = function(user)
-        -- Normally, this function would rollback all base attributes if the sum surpasses the maximum.
-        -- However, I find that behaviour insane so I will not implement it.
-        -- TODO Still, we currently always save changes to base attributes as they happen,
-        --      which is reasonable, but diverges from the original behaviour of changes being temporary until saved.
+        -- This behaviour is insane and should not exist
+        if getMaxAttributePoints(user) ~= getBaseAttributeSum(user) then
+            Interface.Attributes.SetTransientBaseAttribute(user, "agility", Interface.Attributes.GetBaseAttribute(user, "agility"))
+            Interface.Attributes.SetTransientBaseAttribute(user, "constitution", Interface.Attributes.GetBaseAttribute(user, "constitution"))
+            Interface.Attributes.SetTransientBaseAttribute(user, "dexterity", Interface.Attributes.GetBaseAttribute(user, "dexterity"))
+            Interface.Attributes.SetTransientBaseAttribute(user, "essence", Interface.Attributes.GetBaseAttribute(user, "essence"))
+            Interface.Attributes.SetTransientBaseAttribute(user, "intelligence", Interface.Attributes.GetBaseAttribute(user, "intelligence"))
+            Interface.Attributes.SetTransientBaseAttribute(user, "perception", Interface.Attributes.GetBaseAttribute(user, "perception"))
+            Interface.Attributes.SetTransientBaseAttribute(user, "strength", Interface.Attributes.GetBaseAttribute(user, "strength"))
+            Interface.Attributes.SetTransientBaseAttribute(user, "willpower", Interface.Attributes.GetBaseAttribute(user, "willpower"))
+            return false
+        end
+
+        Interface.Attributes.SetBaseAttribute(user, "agility", Interface.Attributes.GetTransientBaseAttribute(user, "agility"))
+        Interface.Attributes.SetBaseAttribute(user, "constitution", Interface.Attributes.GetTransientBaseAttribute(user, "constitution"))
+        Interface.Attributes.SetBaseAttribute(user, "dexterity", Interface.Attributes.GetTransientBaseAttribute(user, "dexterity"))
+        Interface.Attributes.SetBaseAttribute(user, "essence", Interface.Attributes.GetTransientBaseAttribute(user, "essence"))
+        Interface.Attributes.SetBaseAttribute(user, "intelligence", Interface.Attributes.GetTransientBaseAttribute(user, "intelligence"))
+        Interface.Attributes.SetBaseAttribute(user, "perception", Interface.Attributes.GetTransientBaseAttribute(user, "perception"))
+        Interface.Attributes.SetBaseAttribute(user, "strength", Interface.Attributes.GetTransientBaseAttribute(user, "strength"))
+        Interface.Attributes.SetBaseAttribute(user, "willpower", Interface.Attributes.GetTransientBaseAttribute(user, "willpower"))
         return true
     end,
     getBaseAttribute = function(user, attribute)
-        return Interface.Attributes.GetBaseAttribute(user, attribute)
+        return Interface.Attributes.GetTransientBaseAttribute(user, attribute)
     end,
     setBaseAttribute = function(user, attribute, value)
         if Interface.Attributes.isBaseAttributeValid(user, attribute, value) then
-            local prev = Interface.Attributes.GetBaseAttribute(user, attribute)
+            local prev = Interface.Attributes.GetTransientBaseAttribute(user, attribute)
             local new = Interface.Attributes.ClampAttribute(user, attribute, value)
             if prev ~= new then
                 Interface.Attributes.SetBaseAttribute(user, attribute, new)
@@ -363,7 +380,7 @@ local CharacterMethods = {
         return false
      end,
     increaseBaseAttribute = function(user, attribute, amount)
-        local prev = Interface.Attributes.GetBaseAttribute(user, attribute)
+        local prev = Interface.Attributes.GetTransientBaseAttribute(user, attribute)
         local new + amount
         if Interface.Attributes.isBaseAttributeValid(user, attribute, new) then
             new = Interface.Attributes.ClampAttribute(user, attribute, new)
