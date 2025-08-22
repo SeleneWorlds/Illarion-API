@@ -62,7 +62,8 @@ m.Attributes = {
     HandleAttributeChange = function(user, attribute) end,
     ClampAttribute = function(user, attribute, value) return value end,
     IsBaseAttributeValid = function(user, attribute, value) return true end,
-    GetMaxAttributePoints = function(user) return 0 end
+    GetMaxAttributePoints = function(user) return 0 end,
+    GetSex = function(user) return 0 end
 }
 
 m.Character = {
