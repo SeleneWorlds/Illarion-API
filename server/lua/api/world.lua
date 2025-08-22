@@ -270,3 +270,13 @@ function world:isCharacterOnField(pos)
     end
     return false
 end
+
+function world:createItemFromId(itemId, count, pos, always, quality, data)
+    print("createItemFromId", itemId, count, pos, always, quality, table.tostring(data))
+    return Item.fromSeleneEmpty()
+end
+
+function world:getMonstersInRangeOf(pos, range)
+    print("getMonstersInRangeOf", pos, range)
+    return {}
+end
