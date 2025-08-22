@@ -167,8 +167,7 @@ local CharacterMethods = {
         print("performAnimation", animId)
     end,
     actionRunning = function(user)
-        print("actionRunning")
-        return false -- TODO Actions
+        return Interface.Actions.IsActionRunning(user)
     end,
     changeQualityAt = function(user, bodyPosition, amount)
         Interface.Inventory.ChangeQualityAt(user, bodyPosition, amount)
@@ -183,21 +182,19 @@ local CharacterMethods = {
         Interface.Dialog.ShowCharDescription(user, charId, message)
     end,
     startAction = function(user, duration, gfxId, gfxInterval, sfxId, sfxInterval)
-        print("startAction", duration, gfxId, gfxInterval, sfxId, sfxInterval)
-        -- TODO We need to get the current "entrypoint" here, i.e. the function the engine called directly that got us here
-        -- TODO Play GFX and SFX
+        Interface.Actions.StartAction(user, duration, gfxId, gfxInterval, sfxId, sfxInterval)
     end,
     abortAction = function(user)
-        print("abortAction")
+        Interface.Actions.AbortAction(user)
     end,
     successAction = function(user)
-        print("completeAction")
+        Interface.Actions.SuccessAction(user)
     end,
     disturbAction = function(user, disturber)
-        print("disturbAction")
+        Interface.Actions.DisturbAction(user, disturber)
     end,
     changeSource = function(user, item)
-        print("changeSource")
+        Interface.Actions.ChangeSource(user, item)
     end,
     inform = function(user, message, messageEnglish, priority)
         Interface.Player.Inform(user, message, messageEnglish, priority)

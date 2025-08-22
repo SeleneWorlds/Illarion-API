@@ -129,4 +129,18 @@ m.Logger = {
     LogAdmin = function(user, message) end
 }
 
+m.Actions = {
+    IsActionRunning = function(user) return false end,
+    StartAction = function(user, duration, gfxId, gfxInterval, sfxId, sfxInterval) end,
+    AbortAction = function(user) end,
+    SuccessAction = function(user) end,
+    DisturbAction = function(user, disturber) end,
+    ChangeSource = function(user, item) end
+}
+
+m.World = {
+    ShowGFX = function(gfxId, pos) end,
+    PlaySound = function(soundId, pos) end
+}
+
 return m

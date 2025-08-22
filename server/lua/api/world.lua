@@ -194,15 +194,7 @@ function world:erase(item, amount)
 end
 
 function world:gfx(id, pos)
-    local entityType = Registries.FindByMetadata("entities", "gfxId", id)
-    if entityType == nil then
-        print("No entity for gfx id " .. id) -- TODO throw an error
-        return
-    end
-
-    local entity = Entities.CreateTransient(entityType.Name)
-    entity:SetCoordinate(pos)
-    entity:Spawn()
+    Interface.World.ShowGFX(id, pos)
 end
 
 function world:getPlayersOnline()
@@ -234,10 +226,7 @@ function world:swap(item, newId, newQuality)
 end
 
 function world:makeSound(soundId, pos)
-    local sound = Registries.FindByMetadata("sounds", "soundId", soundId)
-    if sound ~= nil then
-        Sounds.PlaySoundAt(pos.x, pos.y, pos.z, sound.Name)
-    end
+    Interface.World.PlaySound(soundId, pos)
 end
 
 function world:getItemName(ItemId, Language)
