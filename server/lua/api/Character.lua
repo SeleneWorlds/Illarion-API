@@ -381,7 +381,7 @@ local CharacterMethods = {
      end,
     increaseBaseAttribute = function(user, attribute, amount)
         local prev = Interface.Attributes.GetTransientBaseAttribute(user, attribute)
-        local new + amount
+        local new = prev + amount
         if Interface.Attributes.isBaseAttributeValid(user, attribute, new) then
             new = Interface.Attributes.ClampAttribute(user, attribute, new)
             if prev ~= new then
