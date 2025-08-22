@@ -2,7 +2,10 @@ local Sounds = require("selene.sounds")
 local Registries = require("selene.registries")
 local Dimensions = require("selene.dimensions")
 local Players = require("selene.players")
+local Network = require("selene.network")
 local Entities = require("selene.entities")
+
+local Interface = require("illarion-api.server.lua.interface")
 
 world = {}
 
@@ -157,7 +160,7 @@ function world:getPlayersInRangeOf(pos, range)
     local result = {}
     for _, player in ipairs(players) do
         local entity = player.ControlledEntity
-        if entity.Coordinate:GetHorizontalDistance(pos) <= range then
+        if entity.Coordinate:GetHorizontalDistanceTo(pos) <= range then
             table.insert(result, Character.fromSelenePlayer(player))
         end
     end
@@ -268,4 +271,42 @@ end
 function world:getMonstersInRangeOf(pos, range)
     print("getMonstersInRangeOf", pos, range)
     return {}
+end
+
+function world:isPersistentAt(pos)
+    print("isPersistentAt", pos)
+    return false
+end
+
+function world:makePersistentAt(pos)
+    print("makePersistentAt", pos)
+end
+
+function world:broadcast(messageDe, messageEn)
+    local players = Players.GetOnlinePlayers()
+    for _,player in ipairs(players) do
+        if user.SelenePlayer.Language == "de" then
+            Network.SendToPlayer(user.SelenePlayer, "illarion:inform", { Message = messageDe })
+        else
+            Network.SendToPlayer(user.SelenePlayer, "illarion:inform", { Message = messageEn })
+        end
+    end
+end
+
+function world:createMonster(monsterId, pos, movePoints)
+    local monsterDef = Registries.FindByMetadata("illarion:monsters", "id", monsterId)
+    if not monsterDef then
+         error("Unknown monster id " .. monsterId)
+    end
+
+    local raceName = monsterDef:GetField("race")
+    local race = Registries.FindByName("illarion:races", raceName)
+    if not race then
+        error("Unknown monster race " .. raceName)
+    end
+
+    local entity = Entities.Create(race.Name .. "_0")
+    entity:SetCustomData(DataKeys.CharacterType, Character.monster)
+    entity:SetCoordinate(pos)
+    entity:Spawn()
 end
