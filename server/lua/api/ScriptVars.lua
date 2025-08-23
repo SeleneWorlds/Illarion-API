@@ -1,14 +1,10 @@
 ScriptVars = {}
 
-function ScriptVars:find(key)
-    return false, nil
+local function nyi(name)
+    return function() error(name .. " not yet implemented") end
 end
 
-function ScriptVars:remove(key)
-end
-
-function ScriptVars:save()
-end
-
-function ScriptVars:set(key, value)
-end
+ScriptVars.find = nyi("ScriptVars.find")
+ScriptVars.remove = nyi("ScriptVars.remove")
+ScriptVars.save = nyi("ScriptVars.save")
+ScriptVars.set = nyi("ScriptVars.set")

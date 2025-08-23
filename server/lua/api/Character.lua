@@ -1,5 +1,3 @@
-local DirectionUtils = require("illarion-api.server.lua.lib.directionUtils")
-
 Character = {
     -- body_pos
     backpack = 0,
@@ -73,7 +71,7 @@ local function nyi(name)
     return function() error(name .. " not yet implemented") end
 end
 
-local CharacterGetters = {
+Character.SeleneGetters = {
     lastSpokenText = nyi("lastSpokenText"),
     effects = nyi("effects"),
     waypoints = nyi("waypoints"),
@@ -88,7 +86,7 @@ local CharacterGetters = {
     attackmode = nyi("attackmode")
 }
 
-local CharacterSetters = {
+Character.SeleneSetters = {
     activeLanguage = nyi("activeLanguage"),
     movepoints = nyi("movepoints"),
     fightpoints = nyi("fightpoints"),
@@ -96,7 +94,7 @@ local CharacterSetters = {
     isinvisible = nyi("isinvisible")
 }
 
-local CharacterMethods = {
+Character.SeleneMethods = {
     isNewPlayer = nyi("isNewPlayer"),
     pageGM = nyi("pageGM"),
     requestInputDialog = nyi("requestInputDialog"),
@@ -196,13 +194,13 @@ local CharacterMethods = {
     getAttackTarget = nyi("getAttackTarget")
 }
 
-local CharacterMT = {
+Character.SeleneMetatable = {
     __index = function(table, key)
-        local method = CharacterMethods[key]
+        local method = Character.SeleneMethods[key]
         if method then
             return method
         end
-        local getter = CharacterGetters[key]
+        local getter = Character.SeleneGetters[key]
         if getter then
             return getter(table)
         end
@@ -210,7 +208,7 @@ local CharacterMT = {
         return rawget(table, key)
     end,
     __newindex = function(table, key, value)
-        local setter = CharacterSetters[key]
+        local setter = Character.SeleneSetters[key]
         if setter then
             setter(table, value)
             return
@@ -218,18 +216,4 @@ local CharacterMT = {
     end
 }
 
-function Character.fromSelenePlayer(player)
-    return setmetatable({SelenePlayer = player, SeleneEntity = function() return player.ControlledEntity end}, CharacterMT)
-end
-
-function Character.fromSeleneEntity(entity)
-    return setmetatable({SeleneEntity = function() return entity end}, CharacterMT)
-end
-
-function isValidChar(character)
-    return true
-end
-
-Character.SeleneGetters = CharacterGetters
-Character.SeleneSetters = CharacterSetters
-Character.SeleneMethods = CharacterMethods
+isValidChar = nyi("isValidChar")

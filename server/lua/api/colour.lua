@@ -1,4 +1,4 @@
-local ColourMT = {
+local metatable = {
     __eq = function (self, other)
         return self.red == other.red and self.green == other.green and self.blue == other.blue and self.alpha == other.alpha
     end,
@@ -8,5 +8,5 @@ local ColourMT = {
 }
 
 function colour(red, green, blue, alpha)
-    return setmetatable({red = red, green = green, blue = blue, alpha = alpha}, ColourMT)
+    return setmetatable({red = red, green = green, blue = blue, alpha = alpha}, metatable)
 end

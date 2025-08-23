@@ -1,14 +1,6 @@
 Item = {}
 
-scriptItem = {
-    notdefined = 0,
-    field = 3,
-    inventory = 4,
-    belt = 5,
-    container = 6
-}
-
-local ItemMethods = {
+Item.SeleneMethods = {
     getType = function(Item)
         if Item.SeleneTile then
             return scriptItem.field
@@ -23,7 +15,7 @@ local ItemMethods = {
     end
 }
 
-local ItemGetters = {
+Item.SeleneGetters = {
     id = function(Item)
         if Item.SeleneTile then
             return tonumber(Item.SeleneTile:GetMetadata("itemId"))
@@ -49,15 +41,15 @@ local ItemGetters = {
     end,
 }
 
-local ItemSetters = {}
+Item.SeleneSetters = {}
 
-local ItemMT = {
+Item.SeleneMetatable = {
     __index = function(table, key)
-        local method = ItemMethods[key]
+        local method = Item.SeleneMethods[key]
         if method then
             return method
         end
-        local getter = ItemGetters[key]
+        local getter = Item.SeleneGetters[key]
         if getter then
             return getter(table)
         end
@@ -65,7 +57,7 @@ local ItemMT = {
         return rawget(table, key)
     end,
     __newindex = function(table, key, value)
-        local setter = ItemSetters[key]
+        local setter = Item.SeleneSetters[key]
         if setter then
             setter(table, value)
             return
@@ -74,9 +66,9 @@ local ItemMT = {
 }
 
 function Item.fromSeleneTile(Tile)
-    return setmetatable({SeleneTile = Tile}, ItemMT)
+    return setmetatable({SeleneTile = Tile}, Item.SeleneMetatable)
 end
 
 function Item.fromSeleneEmpty()
-    return setmetatable({SeleneTile = nil}, ItemMT)
+    return setmetatable({SeleneTile = nil}, Item.SeleneMetatable)
 end
