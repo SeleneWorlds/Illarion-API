@@ -1,7 +1,6 @@
 local m = {}
 
 m.Chat = {
-    Talk = function(user, mode, message, messageEnglish) end,
     SetLanguage = function(user, language) end,
     GetLanguage = function(user) return 0 end
 }
@@ -101,11 +100,7 @@ m.Quests = {
 }
 
 m.Player = {
-    Inform = function(user, message) end,
-    PageGM = function(user, message) end,
-    IsAdmin = function(user) return false end,
-    GetLanguage = function(user) return 0 end,
-    GetTotalOnlineTime = function(user) return 0 end
+    GetLanguage = function(user) return 0 end
 }
 
 m.LTE = {

@@ -70,449 +70,131 @@ Character = {
     highPriority = 102,
 }
 
+local function nyi(name)
+    return function() error(name .. " not yet implemented") end
+end
+
 local CharacterGetters = {
-    lastSpokenText = function(user) error("lastSpokenText is not yet implemented") end,
-    effects = function(user) return {
-        addEffect = function(self, effect)
-            return Interface.LTE.AddEffect(user, effect)
-        end,
-        find = function(self, idOrName)
-            return Interface.LTE.FindEffect(user, idOrName)
-        end,
-        removeEffect = function(self, idOrNameOrEffect)
-            local effect = idOrNameOrEffect
-            if type(idOrNameOrEffect) == "number" or type(idOrNameOrEffect) == "string" then
-                effect = self:find(idOrNameOrEffect)
-            end
-            if not effect then
-                return false
-            end
-            return Interface.LTE.RemoveEffect(user, effect)
-        end
-    } end,
-    waypoints = function(user) return {
-        addWaypoint = function(waypoint)
-            print("waypoints.addWaypoint", waypoint) -- TODO Waypoints
-        end,
-        clear = function()
-           print("waypoints.clear") -- TODO Waypoints
-        end
-    } end,
-    pos = function(user) error("pos is not yet implemented") end,
-    name = function(user) error("name is not yet implemented") end,
-    id = function(user) error("id is not yet implemented") end,
-    activeLanguage = function(user) error("activeLanguage is not yet implemented") end,
-    movepoints = function(user) error("movepoints is not yet implemented") end,
-    fightpoints = function(user) error("fightpoints is not yet implemented") end,
-    speed = function(user) error("speed is not yet implemented") end,
-    isinvisible = function(user) error("isinvisible is not yet implemented") end,
-    attackmode = function(user) error("attackmode is not yet implemented") end,
+    lastSpokenText = nyi("lastSpokenText"),
+    effects = nyi("effects"),
+    waypoints = nyi("waypoints"),
+    pos = nyi("pos"),
+    name = nyi("name"),
+    id = nyi("id"),
+    activeLanguage = nyi("activeLanguage"),
+    movepoints = nyi("movepoints"),
+    fightpoints = nyi("fightpoints"),
+    speed = nyi("speed"),
+    isinvisible = nyi("isinvisible"),
+    attackmode = nyi("attackmode")
 }
 
 local CharacterSetters = {
-    activeLanguage = function(user, value)
-        Interface.Chat.SetLanguage(user, value)
-    end,
-    movepoints = function(user, value)
-         Interface.Movement.SetMovePoints(user, value)
-    end,
-    fightpoints = function(user, value)
-        Interface.Combat.SetFightPoints(user, value)
-    end,
-    speed = function(user, value)
-        Interface.Movement.SetSpeed(user, value)
-    end,
-    isinvisible = function(user, value)
-        user.SeleneEntity():MakeInvisible()
-    end
+    activeLanguage = nyi("activeLanguage"),
+    movepoints = nyi("movepoints"),
+    fightpoints = nyi("fightpoints"),
+    speed = nyi("speed"),
+    isinvisible = nyi("isinvisible")
 }
 
 local CharacterMethods = {
-    isNewPlayer = function(user)
-        return Interface.Player.GetTotalOnlineTime(user) < 10 * 60 * 60
-    end,
-    pageGM = function(user, message)
-        Interface.Player.PageGM(user, message)
-    end,
-    requestInputDialog = function(user, dialog)
-        Interface.Dialog.RequestInput(user, dialog)
-    end,
-    requestMessageDialog = function(user, dialog)
-        Interface.Dialog.ShowMessage(user, dialog)
-    end,
-    requestMerchantDialog = function(user, dialog)
-        Interface.Dialog.ShowMerchant(user, dialog)
-    end,
-    requestSelectionDialog = function(user, dialog)
-        Interface.Dialog.RequestSelection(user, dialog)
-    end,
-    requestCraftingDialog = function(user, dialog)
-        Interface.Dialog.ShowCrafting(user, dialog)
-    end,
-    idleTime = function(user)
-        return user.SelenePlayer.IdleTime
-    end,
-    sendBook = function(user, bookId)
-        Interface.Dialog.ShowBook(user, bookId)
-    end,
-    updateAppearance = function(user)
-        user.SeleneEntity():UpdateVisual()
-    end,
-    performAnimation = function(user, animId)
-        print("performAnimation", animId)
-    end,
-    actionRunning = function(user)
-        return Interface.Actions.IsActionRunning(user)
-    end,
-    changeQualityAt = function(user, bodyPosition, amount)
-        Interface.Inventory.ChangeQualityAt(user, bodyPosition, amount)
-    end,
-    isAdmin = function(user)
-        return Interface.Player.IsAdmin(user)
-    end,
-    talk = function(user, mode, message, messageEnglish)
-        Interface.Chat.Talk(user, mode, message, messageEnglish)
-    end,
-    sendCharDescription = function(user, charId, message)
-        Interface.Dialog.ShowCharDescription(user, charId, message)
-    end,
-    startAction = function(user, duration, gfxId, gfxInterval, sfxId, sfxInterval)
-        Interface.Actions.StartAction(user, duration, gfxId, gfxInterval, sfxId, sfxInterval)
-    end,
-    abortAction = function(user)
-        Interface.Actions.AbortAction(user)
-    end,
-    successAction = function(user)
-        Interface.Actions.SuccessAction(user)
-    end,
-    disturbAction = function(user, disturber)
-        Interface.Actions.DisturbAction(user, disturber)
-    end,
-    changeSource = function(user, item)
-        Interface.Actions.ChangeSource(user, item)
-    end,
-    inform = function(user, message, messageEnglish, priority)
-        Interface.Player.Inform(user, message, messageEnglish, priority)
-    end,
-    introduce = function(user, other)
-        error("introduce is not yet implemented")
-    end,
-    move = function(user, direction, activeMove)
-        -- TODO activeMove = false means it should be a "push" (no walk animation)
-        user.SeleneEntity():Move(direction)
-    end,
-    turn = function(user, direction)
-        local seleneDirection = DirectionUtils.IllaToSelene(direction)
-        if seleneDirection then
-            user.SeleneEntity():SetFacing(seleneDirection)
-        end
-    end,
-    getNextStepDir = function(user, position, outDir)
-        -- Not used in scripts. Normally performs a pathfind and returns the first step to take, discarding the rest.
-        error("getNextStepDir is not implemented.")
-    end,
-    setRace = function(user, race)
-        Interface.Character.SetRace(user, race)
-    end,
-    getRace = function(user)
-        return Interface.Character.GetRace(user)
-    end,
-    getFaceTo = function(user)
-        return DirectionUtils.SeleneToIlla(user.SeleneEntity().Facing) or Character.north
-    end,
-    getType = function(user)
-        return Interface.Character.GetType(user)
-    end,
-    createItem = function(user, itemId, count, quality, data)
-        return Interface.Inventory.CreateItem(user, itemId, count, quality, data)
-    end,
-    getLoot = function(user)
-        error("getLoot is not implemented")
-    end,
-    increasePoisonValue = function(user, amount)
-        user:setPoisonValue(user:getPoisonValue() + amount)
-    end,
-    getPoisonValue = function(user)
-        return Interface.Attributes.GetPoisonValue(user)
-    end,
-    setPoisonValue = function(user, value)
-        Interface.Attributes.SetPoisonValue(user, value)
-    end,
-    getMentalCapacity = function(user)
-        return Interface.Attributes.GetMentalCapacity(user)
-    end,
-    setMentalCapacity = function(user, value)
-        Interface.Attributes.SetMentalCapacity(user, value)
-    end,
-    increaseMentalCapacity = function(user, amount)
-        user:setMentalCapacity(user:getMentalCapacity() + amount)
-    end,
-    setClippingActive = function(user, status)
-        user.SeleneEntity():SetNoClip(status)
-    end,
-    getClippingActive = function(user)
-        return user.SeleneEntity():IsNoClip()
-    end,
-    countItem = function(user, itemId)
-        return Interface.Inventory.CountItem(user, itemId)
-    end,
-    countItemAt = function(user, slots, itemId, data)
-        return Interface.Inventory.CountItemAt(user, slots, itemId, data)
-    end,
-    eraseItem = function(user, itemId, count, data)
-        return Interface.Inventory.EraseItem(user, itemId, count, data)
-    end,
-    increaseAtPos = function(user, bodyPosition, count)
-        Interface.Inventory.IncreaseAtPos(user, bodyPosition, count)
-    end,
-    swapAtPos = function(user, bodyPosition, itemId, quality)
-        Interface.Inventory.SwapAtPos(user, bodyPosition, itemId, quality)
-    end,
-    createAtPos = function(user, bodyPosition, itemId, count)
-        Interface.Inventory.CreateAtPos(user, bodyPosition, itemId, count)
-    end,
-    getItemAt = function(user)
-        return Interface.Inventory.GetItemAt(user)
-    end,
-    getSkillName = function(user, skillId)
-        return Interface.Skills.GetSkillName(skillId)
-    end,
-    getSkill = function(user, skillId)
-        return Interface.Skills.GetSkill(user, skillId)
-    end,
-    getMinorSkill = function(user, skillId)
-        return Interface.Skills.GetMinorSkill(user, skillId)
-    end,
-    increaseAttrib = function(user, attribute, value)
-        if attribute == "sex" then
-            return Interface.Attributes.GetSex(user)
-        end
-
-        local baseValue = Interface.Attributes.GetTransientBaseAttribute(user, attribute)
-        local offset = Interface.Attributes.GetAttributeOffset(user, attribute)
-        local prev = Interface.Attributes.ClampAttribute(user, attribute, baseValue + offset)
-        local new = Interface.Attributes.ClampAttribute(user, attribute, prev + value)
-        if prev ~= new then
-            if baseValue == 0 then
-                Interface.Attributes.SetBaseAttribute(user, attribute, new)
-                Interface.Attributes.SetAttributeOffset(user, attribute, 0)
-            else
-                Interface.Attributes.SetAttributeOffset(user, attribute, new - baseValue)
-            end
-            Interface.Attributes.HandleAttributeChange(user, attribute)
-        end
-        return new
-    end,
-    setAttrib = function(user, attribute, value)
-        local baseValue = Interface.Attributes.GetTransientBaseAttribute(user, attribute)
-        local offset = Interface.Attributes.GetAttributeOffset(user, attribute)
-        local prev = Interface.Attributes.ClampAttribute(user, attribute, baseValue + offset)
-        local new = Interface.Attributes.ClampAttribute(user, attribute, value)
-        if prev ~= new then
-            if baseValue == 0 then
-                Interface.Attributes.SetBaseAttribute(user, attribute, new)
-                Interface.Attributes.SetAttributeOffset(user, attribute, 0)
-            else
-                Interface.Attributes.SetAttributeOffset(user, attribute, new - baseValue)
-            end
-            Interface.Attributes.HandleAttributeChange(user, attribute)
-        end
-    end,
-    isBaseAttributeValid = function(user, attribute, value)
-        return Interface.Attributes.IsBaseAttributeValid(user, attribute, value)
-    end,
-    getBaseAttributeSum = function(user)
-        return Interface.Attributes.GetTransientBaseAttribute(user, "agility") + Interface.Attributes.GetTransientBaseAttribute(user, "constitution") +
-               Interface.Attributes.GetTransientBaseAttribute(user, "dexterity") + Interface.Attributes.GetTransientBaseAttribute(user, "essence") +
-               Interface.Attributes.GetTransientBaseAttribute(user, "intelligence") + Interface.Attributes.GetTransientBaseAttribute(user, "perception") +
-               Interface.Attributes.GetTransientBaseAttribute(user, "strength") + Interface.Attributes.GetTransientBaseAttribute(user, "willpower")
-    end,
-    getMaxAttributePoints = function(user)
-        return Interface.Attributes.GetMaxAttributePoints(user)
-    end,
-    saveBaseAttributes = function(user)
-        -- This behaviour is insane and should not exist
-        if getMaxAttributePoints(user) ~= getBaseAttributeSum(user) then
-            Interface.Attributes.SetTransientBaseAttribute(user, "agility", Interface.Attributes.GetBaseAttribute(user, "agility"))
-            Interface.Attributes.SetTransientBaseAttribute(user, "constitution", Interface.Attributes.GetBaseAttribute(user, "constitution"))
-            Interface.Attributes.SetTransientBaseAttribute(user, "dexterity", Interface.Attributes.GetBaseAttribute(user, "dexterity"))
-            Interface.Attributes.SetTransientBaseAttribute(user, "essence", Interface.Attributes.GetBaseAttribute(user, "essence"))
-            Interface.Attributes.SetTransientBaseAttribute(user, "intelligence", Interface.Attributes.GetBaseAttribute(user, "intelligence"))
-            Interface.Attributes.SetTransientBaseAttribute(user, "perception", Interface.Attributes.GetBaseAttribute(user, "perception"))
-            Interface.Attributes.SetTransientBaseAttribute(user, "strength", Interface.Attributes.GetBaseAttribute(user, "strength"))
-            Interface.Attributes.SetTransientBaseAttribute(user, "willpower", Interface.Attributes.GetBaseAttribute(user, "willpower"))
-            return false
-        end
-
-        Interface.Attributes.SetBaseAttribute(user, "agility", Interface.Attributes.GetTransientBaseAttribute(user, "agility"))
-        Interface.Attributes.SetBaseAttribute(user, "constitution", Interface.Attributes.GetTransientBaseAttribute(user, "constitution"))
-        Interface.Attributes.SetBaseAttribute(user, "dexterity", Interface.Attributes.GetTransientBaseAttribute(user, "dexterity"))
-        Interface.Attributes.SetBaseAttribute(user, "essence", Interface.Attributes.GetTransientBaseAttribute(user, "essence"))
-        Interface.Attributes.SetBaseAttribute(user, "intelligence", Interface.Attributes.GetTransientBaseAttribute(user, "intelligence"))
-        Interface.Attributes.SetBaseAttribute(user, "perception", Interface.Attributes.GetTransientBaseAttribute(user, "perception"))
-        Interface.Attributes.SetBaseAttribute(user, "strength", Interface.Attributes.GetTransientBaseAttribute(user, "strength"))
-        Interface.Attributes.SetBaseAttribute(user, "willpower", Interface.Attributes.GetTransientBaseAttribute(user, "willpower"))
-        return true
-    end,
-    getBaseAttribute = function(user, attribute)
-        return Interface.Attributes.GetTransientBaseAttribute(user, attribute)
-    end,
-    setBaseAttribute = function(user, attribute, value)
-        if Interface.Attributes.isBaseAttributeValid(user, attribute, value) then
-            local prev = Interface.Attributes.GetTransientBaseAttribute(user, attribute)
-            local new = Interface.Attributes.ClampAttribute(user, attribute, value)
-            if prev ~= new then
-                Interface.Attributes.SetBaseAttribute(user, attribute, new)
-                Interface.Attributes.HandleAttributeChange(user, attribute)
-            end
-            return true
-        end
-        return false
-     end,
-    increaseBaseAttribute = function(user, attribute, amount)
-        local prev = Interface.Attributes.GetTransientBaseAttribute(user, attribute)
-        local new = prev + amount
-        if Interface.Attributes.isBaseAttributeValid(user, attribute, new) then
-            new = Interface.Attributes.ClampAttribute(user, attribute, new)
-            if prev ~= new then
-                Interface.Attributes.SetBaseAttribute(user, attribute, new)
-                Interface.Attributes.HandleAttributeChange(user, attribute)
-            end
-            return true
-        end
-        return false
-    end,
-    increaseSkill = function(user, skill, value)
-        local prev = user:getSkill(skill)
-        user:setSkill(skill, prev + value, user:getMinorSkill(skill))
-    end,
-    increaseMinorSkill = function(user, skillId, value)
-        local prev = user:getMinorSkill(skillId)
-        user:setSkill(skillId, user:getSkill(skillId), prev + value)
-    end,
-    setSkill = function(user, skillId, major, minor)
-        Interface.Skills.SetSkill(user, skillId, major)
-        Interface.Skills.SetSkillMinor(user, skillId, minor)
-    end,
-    setSkinColour = function(user, skinColor)
-        Interface.Character.SetSkinColor(user, skinColor)
-    end,
-    getSkinColour = function(user)
-        return Interface.Character.GetSkinColor(user)
-    end,
-    setHairColour = function(user, hairColor)
-        Interface.Character.SetHairColor(user, hairColor)
-    end,
-    getHairColour = function(user)
-        return Interface.Character.GetHairColor(user)
-    end,
-    setHair = function(user, hairId)
-        Interface.Character.SetHair(user, hairId)
-    end,
-    getHair = function(user)
-        return Interface.Character.GetHair(user)
-    end,
-    setBeard = function(user, beardId)
-        Interface.Character.SetBeard(user, beardId)
-    end,
-    getBeard = function(user)
-        return Interface.Character.GetBeard(user)
-    end,
-    learn = function(user, skillId, actionPoints, learnLimit)
-        Interface.Skills.Learn(user, skillId, actionPoints, learnLimit)
-    end,
-    getSkillValue = function(user, skill)
-        return user:getSkill(skill)
-    end,
-    teachMagic = function(user, magicType, magicFlag)
-        local anyFlags = false
-        for i = 0, 4 do
-            if user:getMagicFlags(i) ~= 0 then
-                anyFlags = true
-                break
-            end
-        end
-
-        if not anyFlags then
-            user:setMagicType(magicType)
-        end
-
-        local flags = user:getMagicFlags(magicType)
-        flags = flags | magicFlag
-        Interface.Magic.SetMagicFlags(user, magicType, flags)
-    end,
-    isInRange = function(user, other, distance)
-        return user:isInRangeToPosition(other.position, distance)
-    end,
-    isInRangeToPosition = function(user, position, distance)
-        local dx = math.abs(user.pos.x - position.x)
-        local dy = math.abs(user.pos.y - position.y)
-        local dz = math.abs(user.pos.z - position.z)
-        return (dx <= distance) and (dy <= distance) and dz == 0
-    end,
-    distanceMetric = function(user, other)
-        return user:distanceMetricToPosition(other.position)
-    end,
-    distanceMetricToPosition = function(user, position)
-        local dx = math.abs(user.pos.x - position.x)
-        local dy = math.abs(user.pos.y - position.y)
-        local dz = math.abs(user.pos.z - position.z)
-        return math.max(dx, dy, dz)
-    end,
-    getMagicType = function(user)
-        return Interface.Magic.GetMagicType(user)
-    end,
-    setMagicType = function(user, magicType)
-        Interface.Magic.SetMagicType(user, magicType)
-    end,
-    getMagicFlags = function(user, magicType)
-        return Interface.Magic.GetMagicFlags(user, magicType)
-    end,
-    warp = function(user, pos)
-        -- TODO illa fails this if occupied
-        user.SeleneEntity():SetCoordinate(pos)
-    end,
-    forceWarp = function(user, pos)
-        user.SeleneEntity():SetCoordinate(pos)
-    end,
-    startMusic = function(user, music)
-        print("startMusic")
-    end,
-    defaultMusic = function(user)
-        print("defaultMusic")
-    end,
-    callAttackScript = function(attacker, defender)
-        Interface.Combat.CallAttackScript(attacker, defender)
-    end,
-    getItemList = function(user, itemId) return Interface.Inventory.GetItemList(user, itemId) end,
-    getPlayerLanguage = function(user) return Interface.Player.GetLanguage(user) end,
-    getBackPack = function(user) return Interface.Inventory.GetBackPack(user) end,
-    getDepot = function(user, depotId) return Interface.Inventory.GetDepot(user, depotId) end,
-    setQuestProgress = function(user, questId, progress)
-        Interface.Quests.SetQuestProgress(user, questId, progress)
-    end,
-    getQuestProgress = function(user, questId)
-        return Interface.Quests.GetQuestProgress(user, questId)
-    end,
-    getOnRoute = function(user)
-        print("getOnRoute")
-        return false
-    end,
-    setOnRoute = function(user, isOnRoute)
-        print("setOnRoute")
-    end,
-    getMonsterType = function(user)
-        error("getMonsterType is not implemented")
-    end,
-    logAdmin = function(user, message)
-        Interface.Logger.LogAdmin(user, message)
-    end,
-    stopAttack = function(user)
-        Interface.Combat.StopCombat(user)
-    end,
-    getAttackTarget = function(user)
-        return Interface.Combat.GetTarget(user)
-    end,
+    isNewPlayer = nyi("isNewPlayer"),
+    pageGM = nyi("pageGM"),
+    requestInputDialog = nyi("requestInputDialog"),
+    requestMessageDialog = nyi("requestMessageDialog"),
+    requestMerchantDialog = nyi("requestMerchantDialog"),
+    requestSelectionDialog = nyi("requestSelectionDialog"),
+    requestCraftingDialog = nyi("requestCraftingDialog"),
+    idleTime = nyi("idleTime"),
+    sendBook = nyi("sendBook"),
+    updateAppearance = nyi("updateAppearance"),
+    performAnimation = nyi("performAnimation"),
+    actionRunning = nyi("actionRunning"),
+    changeQualityAt = nyi("changeQualityAt"),
+    isAdmin = nyi("isAdmin"),
+    talk = nyi("talk"),
+    sendCharDescription = nyi("sendCharDescription"),
+    startAction = nyi("startAction"),
+    abortAction = nyi("abortAction"),
+    successAction = nyi("successAction"),
+    disturbAction = nyi("disturbAction"),
+    changeSource = nyi("changeSource"),
+    inform = nyi("inform"),
+    introduce = nyi("introduce"),
+    move = nyi("move"),
+    turn = nyi("turn"),
+    getNextStepDir = nyi("getNextStepDir"),
+    setRace = nyi("setRace"),
+    getRace = nyi("getRace"),
+    getFaceTo = nyi("getFaceTo"),
+    getType = nyi("getType"),
+    createItem = nyi("createItem"),
+    getLoot = nyi("getLoot"),
+    increasePoisonValue = nyi("increasePoisonValue"),
+    getPoisonValue = nyi("getPoisonValue"),
+    setPoisonValue = nyi("setPoisonValue"),
+    getMentalCapacity = nyi("getMentalCapacity"),
+    setMentalCapacity = nyi("setMentalCapacity"),
+    increaseMentalCapacity = nyi("increaseMentalCapacity"),
+    setClippingActive = nyi("setClippingActive"),
+    getClippingActive = nyi("getClippingActive"),
+    countItem = nyi("countItem"),
+    countItemAt = nyi("countItemAt"),
+    eraseItem = nyi("eraseItem"),
+    increaseAtPos = nyi("increaseAtPos"),
+    swapAtPos = nyi("swapAtPos"),
+    createAtPos = nyi("createAtPos"),
+    getItemAt = nyi("getItemAt"),
+    getSkillName = nyi("getSkillName"),
+    getSkill = nyi("getSkill"),
+    getMinorSkill = nyi("getMinorSkill"),
+    increaseAttrib = nyi("increaseAttrib"),
+    setAttrib = nyi("setAttrib"),
+    isBaseAttributeValid = nyi("isBaseAttributeValid"),
+    getBaseAttributeSum = nyi("getBaseAttributeSum"),
+    getMaxAttributePoints = nyi("getMaxAttributePoints"),
+    saveBaseAttributes = nyi("saveBaseAttributes"),
+    getBaseAttribute = nyi("getBaseAttribute"),
+    setBaseAttribute = nyi("setBaseAttribute"),
+    increaseBaseAttribute = nyi("increaseBaseAttribute"),
+    increaseSkill = nyi("increaseSkill"),
+    increaseMinorSkill = nyi("increaseMinorSkill"),
+    setSkill = nyi("setSkill"),
+    setSkinColour = nyi("setSkinColour"),
+    getSkinColour = nyi("getSkinColour"),
+    setHairColour = nyi("setHairColour"),
+    getHairColour = nyi("getHairColour"),
+    setHair = nyi("setHair"),
+    getHair = nyi("getHair"),
+    setBeard = nyi("setBeard"),
+    getBeard = nyi("getBeard"),
+    learn = nyi("learn"),
+    getSkillValue = nyi("getSkillValue"),
+    teachMagic = nyi("teachMagic"),
+    isInRange = nyi("isInRange"),
+    isInRangeToPosition = nyi("isInRangeToPosition"),
+    distanceMetric = nyi("distanceMetric"),
+    distanceMetricToPosition = nyi("distanceMetricToPosition"),
+    getMagicType = nyi("getMagicType"),
+    setMagicType = nyi("setMagicType"),
+    getMagicFlags = nyi("getMagicFlags"),
+    warp = nyi("warp"),
+    forceWarp = nyi("forceWarp"),
+    startMusic = nyi("startMusic"),
+    defaultMusic = nyi("defaultMusic"),
+    callAttackScript = nyi("callAttackScript"),
+    getItemList = nyi("getItemList"),
+    getPlayerLanguage = nyi("getPlayerLanguage"),
+    getBackPack = nyi("getBackPack"),
+    getDepot = nyi("getDepot"),
+    setQuestProgress = nyi("setQuestProgress"),
+    getQuestProgress = nyi("getQuestProgress"),
+    getOnRoute = nyi("getOnRoute"),
+    setOnRoute = nyi("setOnRoute"),
+    getMonsterType = nyi("getMonsterType"),
+    logAdmin = nyi("logAdmin"),
+    stopAttack = nyi("stopAttack"),
+    getAttackTarget = nyi("getAttackTarget")
 }
 
 local CharacterMT = {
