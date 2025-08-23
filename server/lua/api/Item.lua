@@ -64,11 +64,3 @@ Item.SeleneMetatable = {
         end
     end
 }
-
-function Item.fromSeleneTile(Tile)
-    return setmetatable({SeleneTile = Tile}, Item.SeleneMetatable)
-end
-
-function Item.fromSeleneEmpty()
-    return setmetatable({}, Item.SeleneMetatable)
-end
