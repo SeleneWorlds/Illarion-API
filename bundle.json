@@ -3,7 +3,6 @@
   "description": "A bridge that implements Illarion lua bindings, allowing native Illarion scripts to run in Selene.",
   "dependencies": [],
   "entrypoints": [
-    "server/lua/polyfills.lua",
     "server/lua/api/Action.lua",
     "server/lua/api/ArmorStruct.lua",
     "server/lua/api/Character.lua",
