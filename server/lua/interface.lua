@@ -77,7 +77,8 @@ m.Character = {
     GetHair = function(user) return 0 end,
     SetHair = function(user, hairId) end,
     GetBeard = function(user) return 0 end,
-    SetBeard = function(user, beardId) end
+    SetBeard = function(user, beardId) end,
+    Introduce = function(user, other) end
 }
 
 m.Magic = {

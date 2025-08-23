@@ -199,8 +199,8 @@ local CharacterMethods = {
     inform = function(user, message, messageEnglish, priority)
         Interface.Player.Inform(user, message, messageEnglish, priority)
     end,
-    introduce = function(user)
-        print("introduce")
+    introduce = function(user, other)
+        Interface.Character.Introduce(user, other)
     end,
     move = function(user, direction, activeMove)
         -- TODO ActiveMove??
