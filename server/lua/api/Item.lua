@@ -70,5 +70,5 @@ function Item.fromSeleneTile(Tile)
 end
 
 function Item.fromSeleneEmpty()
-    return setmetatable({SeleneTile = nil}, Item.SeleneMetatable)
+    return setmetatable({}, Item.SeleneMetatable)
 end
