@@ -1,15 +1,50 @@
-function SeleneContainer()
-    return {
-        getSlotCount = function() return 0 end,
-        viewItemNr = function(itempos) return false, nil, nil end,
-        takeItemNr = function(itempos, count) return false, nil end,
-        changeQualityAt = function(itempos, amount) end,
-        insertContainer = function(item, container, itempos) return false end,
-        insertItem = function(item, merge) end,
-        countItem = function(itemid, data) return 0 end,
-        eraseItem = function(itemid, count, data) return 0 end,
-        increaseAtPos = function(itempos, value) end,
-        swapAtPos = function(itempos, newId, newQuality) return false end,
-        weight = function() return 0 end
-    }
+local function nyi(name)
+    return function() error(name .. " not yet implemented") end
 end
+
+Container = {}
+
+setmetatable(Container, {
+    __call = function(self, id)
+        return Container.SeleneConstructor(id)
+    end
+})
+
+Container.SeleneConstructor = nyi("Container.SeleneConstructor")
+Container.SeleneGetters = {}
+Container.SeleneSetters = {}
+Container.SeleneMethods = {
+    getSlotCount = nyi("getSlotCount"),
+    takeItemNr = nyi("takeItemNr"),
+    viewItemNr = nyi("viewItemNr"),
+    changeQualityAt = nyi("changeQualityAt"),
+    insertContainer = nyi("insertContainer"),
+    insertItem = nyi("insertItem"),
+    countItem = nyi("countItem"),
+    eraseItem = nyi("eraseItem"),
+    increaseAtPos = nyi("increaseAtPos"),
+    swapAtPos = nyi("swapAtPos"),
+    weight = nyi("weight")
+}
+
+Container.SeleneMetatable = {
+    __index = function(table, key)
+        local method = Container.SeleneMethods[key]
+        if method then
+            return method
+        end
+        local getter = Container.SeleneGetters[key]
+        if getter then
+            return getter(table)
+        end
+
+        return rawget(table, key)
+    end,
+    __newindex = function(table, key, value)
+        local setter = Container.SeleneSetters[key]
+        if setter then
+            setter(table, value)
+            return
+        end
+    end
+}
