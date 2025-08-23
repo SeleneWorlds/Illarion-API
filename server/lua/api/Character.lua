@@ -71,10 +71,7 @@ Character = {
 }
 
 local CharacterGetters = {
-    lastSpokenText = function(user)
-        -- TODO remember to set last spoken text once chat is implemented
-        return Interface.Chat.GetLastSpokenText(user)
-    end,
+    lastSpokenText = function(user) error("lastSpokenText is not yet implemented") end,
     effects = function(user) return {
         addEffect = function(self, effect)
             return Interface.LTE.AddEffect(user, effect)
@@ -101,17 +98,15 @@ local CharacterGetters = {
            print("waypoints.clear") -- TODO Waypoints
         end
     } end,
-    pos = function(user)
-        return user.SeleneEntity().Coordinate
-    end,
-    name = function(user) return user.SeleneEntity().Name end,
-    id = function(user) return Interface.Player.GetID(user) end,
-    activeLanguage = function(user) return Interface.Chat.GetLanguage(user) end,
-    movepoints = function(user) return Interface.Movement.GetMovePoints(user) end,
-    fightpoints = function(user) return Interface.Combat.GetFightPoints(user:GetFightPoints()) end,
-    speed = function(user) return Interface.Movement.GetSpeed(user) end,
-    isinvisible = function(user) return user.SeleneEntity():IsInvisible() end,
-    attackmode = function(user) return Interface.Combat.IsInCombat(user) end,
+    pos = function(user) error("pos is not yet implemented") end,
+    name = function(user) error("name is not yet implemented") end,
+    id = function(user) error("id is not yet implemented") end,
+    activeLanguage = function(user) error("activeLanguage is not yet implemented") end,
+    movepoints = function(user) error("movepoints is not yet implemented") end,
+    fightpoints = function(user) error("fightpoints is not yet implemented") end,
+    speed = function(user) error("speed is not yet implemented") end,
+    isinvisible = function(user) error("isinvisible is not yet implemented") end,
+    attackmode = function(user) error("attackmode is not yet implemented") end,
 }
 
 local CharacterSetters = {
@@ -200,10 +195,10 @@ local CharacterMethods = {
         Interface.Player.Inform(user, message, messageEnglish, priority)
     end,
     introduce = function(user, other)
-        Interface.Character.Introduce(user, other)
+        error("introduce is not yet implemented")
     end,
     move = function(user, direction, activeMove)
-        -- TODO ActiveMove??
+        -- TODO activeMove = false means it should be a "push" (no walk animation)
         user.SeleneEntity():Move(direction)
     end,
     turn = function(user, direction)
@@ -214,8 +209,7 @@ local CharacterMethods = {
     end,
     getNextStepDir = function(user, position, outDir)
         -- Not used in scripts. Normally performs a pathfind and returns the first step to take, discarding the rest.
-        print("getNextStepDir")
-        return false, nil
+        error("getNextStepDir is not implemented.")
     end,
     setRace = function(user, race)
         Interface.Character.SetRace(user, race)
@@ -233,8 +227,7 @@ local CharacterMethods = {
         return Interface.Inventory.CreateItem(user, itemId, count, quality, data)
     end,
     getLoot = function(user)
-        print("getLoot")
-        return {}
+        error("getLoot is not implemented")
     end,
     increasePoisonValue = function(user, amount)
         user:setPoisonValue(user:getPoisonValue() + amount)
@@ -509,8 +502,7 @@ local CharacterMethods = {
         print("setOnRoute")
     end,
     getMonsterType = function(user)
-        print("getMonsterType")
-        return 0
+        error("getMonsterType is not implemented")
     end,
     logAdmin = function(user, message)
         Interface.Logger.LogAdmin(user, message)
@@ -556,3 +548,7 @@ end
 function isValidChar(character)
     return true
 end
+
+Character.SeleneGetters = CharacterGetters
+Character.SeleneSetters = CharacterSetters
+Character.SeleneMethods = CharacterMethods

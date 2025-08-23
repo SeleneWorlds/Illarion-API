@@ -2,7 +2,6 @@ local m = {}
 
 m.Chat = {
     Talk = function(user, mode, message, messageEnglish) end,
-    GetLastSpokenText = function(user) return "" end,
     SetLanguage = function(user, language) end,
     GetLanguage = function(user) return 0 end
 }
@@ -77,8 +76,7 @@ m.Character = {
     GetHair = function(user) return 0 end,
     SetHair = function(user, hairId) end,
     GetBeard = function(user) return 0 end,
-    SetBeard = function(user, beardId) end,
-    Introduce = function(user, other) end
+    SetBeard = function(user, beardId) end
 }
 
 m.Magic = {
@@ -107,8 +105,7 @@ m.Player = {
     PageGM = function(user, message) end,
     IsAdmin = function(user) return false end,
     GetLanguage = function(user) return 0 end,
-    GetTotalOnlineTime = function(user) return 0 end,
-    GetID = function(user) return 0 end
+    GetTotalOnlineTime = function(user) return 0 end
 }
 
 m.LTE = {
