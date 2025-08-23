@@ -5,7 +5,9 @@ local Players = require("selene.players")
 local Network = require("selene.network")
 local Entities = require("selene.entities")
 
-local Interface = require("illarion-api.server.lua.interface")
+local function nyi(name)
+    return function() error(name .. " not yet implemented") end
+end
 
 world = {}
 
@@ -196,9 +198,7 @@ function world:erase(item, amount)
     end
 end
 
-function world:gfx(id, pos)
-    Interface.World.ShowGFX(id, pos)
-end
+world.gfx = nyi("gfx")
 
 function world:getPlayersOnline()
     local result = {}
@@ -228,9 +228,7 @@ function world:swap(item, newId, newQuality)
     end
 end
 
-function world:makeSound(soundId, pos)
-    Interface.World.PlaySound(soundId, pos)
-end
+world.makeSound = nyi("makeSound")
 
 function world:getItemName(ItemId, Language)
     local tile = Registries.FindByMetadata("tiles", "itemId", ItemId)

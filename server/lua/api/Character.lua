@@ -1,4 +1,3 @@
-local Interface = require("illarion-api.server.lua.interface")
 local DirectionUtils = require("illarion-api.server.lua.lib.directionUtils")
 
 Character = {

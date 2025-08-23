@@ -4,7 +4,6 @@
   "dependencies": [],
   "entrypoints": [
     "server/lua/polyfills.lua",
-    "server/lua/interface.lua",
     "server/lua/api/Action.lua",
     "server/lua/api/ArmorStruct.lua",
     "server/lua/api/Character.lua",

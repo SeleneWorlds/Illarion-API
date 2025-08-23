@@ -1,53 +1,41 @@
-local Interface = require("illarion-api.server.lua.interface")
-
 LongTimeEffect = {}
 
 setmetatable(LongTimeEffect, {
     __call = function(self, id, nextCalled)
-        return Interface.LTE.Create(id, nextCalled)
+        return LongTimeEffect.SeleneConstructor(id, nextCalled)
     end
 })
 
-local LongTimeEffectGetters = {
-    effectId = function(effect)
-        return tonumber(effect.SeleneEffectDefinition:GetMetadata("lteId"))
-    end,
-    effectName = function(effect)
-        return effect.SeleneEffectDefinition:GetMetadata("name")
-    end,
-    nextCalled = function(effect)
-        return Interface.LTE.GetNextCalled(effect)
-    end,
-    numberCalled = function(effect)
-        return Interface.LTE.GetNumberCalled(effect)
-    end
+local function nyi(name)
+    return function() error(name .. " not yet implemented") end
+end
+
+LongTimeEffect.SeleneGetters = {
+    effectId = nyi("effectId"),
+    effectName = nyi("effectName"),
+    nextCalled = nyi("nextCalled"),
+    numberCalled = nyi("numberCalled")
 }
 
-local LongTimeEffectSetters = {
-    nextCalled = function(effect, value)
-        Interface.LTE.SetNextCalled(effect, value)
-    end
+LongTimeEffect.SeleneConstructor = nyi("LongTimeEffect.SeleneConstructor")
+
+LongTimeEffect.SeleneSetters = {
+    nextCalled = nyi("nextCalled")
 }
 
-local LongTimeEffectMethods = {
-    addValue = function(effect, key, value)
-        Interface.LTE.AddValue(effect, key, value)
-    end,
-    findValue = function(effect, key)
-        return Interface.LTE.FindValue(effect, key)
-    end,
-    removeValue = function(effect, key)
-        Interface.LTE.RemoveValue(effect, key)
-    end
+LongTimeEffect.SeleneMethods = {
+    addValue = nyi("addValue"),
+    findValue = nyi("findValue"),
+    removeValue = nyi("removeValue")
 }
 
-LongTimeEffectMT = {
+LongTimeEffect.SeleneMetatable = {
     __index = function(table, key)
-        local method = LongTimeEffectMethods[key]
+        local method = LongTimeEffect.SeleneMethods[key]
         if method then
             return method
         end
-        local getter = LongTimeEffectGetters[key]
+        local getter = LongTimeEffect.SeleneGetters[key]
         if getter then
             return getter(table)
         end
@@ -55,7 +43,7 @@ LongTimeEffectMT = {
         return rawget(table, key)
     end,
     __newindex = function(table, key, value)
-        local setter = LongTimeEffectSetters[key]
+        local setter = LongTimeEffect.SeleneSetters[key]
         if setter then
             setter(table, value)
             return
