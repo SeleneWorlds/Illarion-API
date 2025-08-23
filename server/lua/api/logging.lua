@@ -1,11 +1,9 @@
-local Interface = require("illarion-api.server.lua.interface")
-
 function log(message)
-    Interface.Logger.Log(message)
+    print(message)
 end
 
 setmetatable(debug, {
     __call = function(_, message)
-        Interface.Logger.LogDebug(message)
+        print(message)
     end
 })
