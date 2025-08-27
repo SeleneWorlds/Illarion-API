@@ -213,6 +213,8 @@ Character.SeleneMetatable = {
             setter(table, value)
             return
         end
+
+        rawset(table, key, value)
     end
 }
 
