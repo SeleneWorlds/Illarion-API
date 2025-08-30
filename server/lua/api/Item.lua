@@ -1,44 +1,20 @@
+local function nyi(name)
+    return function() error(name .. " not yet implemented") end
+end
+
 Item = {}
 
 Item.SeleneMethods = {
-    getType = function(Item)
-        if Item.SeleneTile then
-            return scriptItem.field
-        end
-        return scriptItem.notdefined
-    end,
-    getData = function(Item, Key)
-        return "" -- TODO
-    end,
-    setData = function(Item, Key, Value)
-        -- TODO
-    end
+    getType = nyi("getType"),
+    getData = nyi("getData"),
+    setData = nyi("setData")
 }
 
 Item.SeleneGetters = {
-    id = function(Item)
-        if Item.SeleneTile then
-            return tonumber(Item.SeleneTile:GetMetadata("itemId"))
-        end
-        return 0
-    end,
-    isLarge = function(Item) return false end, -- TODO what is this?
-    pos = function(Item)
-        if Item.SeleneTile then
-            return {
-                x = Item.SeleneTile.X,
-                y = Item.SeleneTile.Y,
-                z = Item.SeleneTile.Z
-            }
-        end
-        return { x = 0, y = 0, z = 0 }
-    end,
-    number = function(Item)
-        if Item.SeleneTile then
-            return 1
-        end
-        return 0
-    end,
+    id = nyi("id"),
+    isLarge = nyi("isLarge"),
+    pos = nyi("pos"),
+    number = nyi("number")
 }
 
 Item.SeleneSetters = {}
