@@ -21,6 +21,7 @@
     "server/lua/api/random.lua",
     "server/lua/api/ScriptVars.lua",
     "server/lua/api/SelectionDialog.lua",
+    "server/lua/api/MerchantDialog.lua",
     "server/lua/api/WeaponStruct.lua",
     "server/lua/api/world.lua",
     "server/lua/api/scriptItem.lua"
