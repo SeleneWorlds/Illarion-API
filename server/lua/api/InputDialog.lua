@@ -22,6 +22,7 @@ InputDialog.SeleneMetatable = {
         }
         setmetatable(o, self)
         self.__index = self
+        return o
     end,
     __index = function(table, key)
         local method = InputDialog.SeleneMethods[key]
