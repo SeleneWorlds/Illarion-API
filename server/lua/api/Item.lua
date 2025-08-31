@@ -13,7 +13,10 @@ Item.SeleneMethods = {
 Item.SeleneGetters = {
     id = nyi("id"),
     isLarge = nyi("isLarge"),
+    owner = nyi("owner"),
     pos = nyi("pos"),
+    itempos = nyi("itempos"),
+    inside = nyi("inside"),
     number = nyi("number")
 }
 
