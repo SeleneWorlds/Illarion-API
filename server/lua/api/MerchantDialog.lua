@@ -12,7 +12,7 @@ MerchantDialog.SeleneMethods = {
     getPurchaseIndex = nyi("getPurchaseIndex"),
     getPurchaseAmount = nyi("getPurchaseAmount"),
     getSaleItem = nyi("getSaleItem"),
-    getLookAtList = nyi("getLookAtList"),
+    getLookAtList = nyi("getLookAtList")
 }
 
 MerchantDialog.SeleneGetters = {}

@@ -1,24 +1,47 @@
-function SelectionDialog(title, message, callback)
-    local dialog = {
-        title = title,
-        message = message,
-        callback = callback,
-        closeOnMove = false,
-        options = {},
-        success = false,
-        selectedIndex = 0
-    }
-    function dialog:addOption(item, name)
-        table.insert(dialog.options, { item = item, name = name })
-    end
-    function dialog:setCloseOnMove()
-        self.closeOnMove = true
-    end
-    function dialog:getSuccess()
-        return self.success
-    end
-    function dialog:getSelectedIndex()
-        return self.selectedIndex
-    end
-    return dialog
+local function nyi(name)
+    return function() error(name .. " not yet implemented") end
 end
+
+SelectionDialog = {}
+
+SelectionDialog.SeleneMethods = {
+    addOption = nyi("addOption"),
+    setCloseOnMove = nyi("setCloseOnMove"),
+    getSuccess = nyi("getSuccess"),
+    getSelectedIndex = nyi("getSelectedIndex")
+}
+SelectionDialog.SeleneGetters = {}
+SelectionDialog.SeleneSetters = {}
+
+SelectionDialog.SeleneMetatable = {
+    __call = function(self, title, message, callback)
+        local o = {
+            title = title,
+            message = message,
+            callback = callback
+        }
+        setmetatable(o, self)
+        self.__index = self
+    end,
+    __index = function(table, key)
+        local method = SelectionDialog.SeleneMethods[key]
+        if method then
+            return method
+        end
+        local getter = SelectionDialog.SeleneGetters[key]
+        if getter then
+            return getter(table)
+        end
+
+        return rawget(table, key)
+    end,
+    __newindex = function(table, key, value)
+        local setter = SelectionDialog.SeleneSetters[key]
+        if setter then
+            setter(table, value)
+            return
+        end
+
+        rawset(table, key, value)
+    end
+}
