@@ -49,3 +49,5 @@ MerchantDialog.SeleneMetatable = {
         rawset(table, key, value)
     end
 }
+
+setmetatable(MerchantDialog, MerchantDialog.SeleneMetatable)

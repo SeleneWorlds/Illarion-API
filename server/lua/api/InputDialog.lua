@@ -45,3 +45,5 @@ InputDialog.SeleneMetatable = {
         rawset(table, key, value)
     end
 }
+
+setmetatable(InputDialog, InputDialog.SeleneMetatable)

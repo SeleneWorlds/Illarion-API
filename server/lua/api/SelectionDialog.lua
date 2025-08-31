@@ -45,3 +45,5 @@ SelectionDialog.SeleneMetatable = {
         rawset(table, key, value)
     end
 }
+
+setmetatable(SelectionDialog, SelectionDialog.SeleneMetatable)

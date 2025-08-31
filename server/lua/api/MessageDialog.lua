@@ -40,3 +40,5 @@ MessageDialog.SeleneMetatable = {
         rawset(table, key, value)
     end
 }
+
+setmetatable(MessageDialog, MessageDialog.SeleneMetatable)
