@@ -3,6 +3,13 @@ local function nyi(name)
 end
 
 MerchantDialog = {}
+MerchantDialog.playerAborts = 0
+MerchantDialog.playerSells = 1
+MerchantDialog.playerBuys = 2
+MerchantDialog.playerLooksAt = 3
+MerchantDialog.listSell = 0
+MerchantDialog.listBuyPrimary = 1
+MerchantDialog.listBuySecondary = 2
 
 MerchantDialog.SeleneMethods = {
     addOffer = nyi("addOffer"),
@@ -21,6 +28,7 @@ MerchantDialog.SeleneSetters = {}
 MerchantDialog.SeleneMetatable = {
     __call = function(self, title, callback)
         local o = {
+            type = "MerchantDialog",
             title = title,
             callback = callback
         }

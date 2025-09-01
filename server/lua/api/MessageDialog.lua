@@ -11,6 +11,7 @@ MessageDialog.SeleneSetters = {}
 MessageDialog.SeleneMetatable = {
     __call = function(self, title, message, callback)
         local o = {
+            type = "MessageDialog",
             title = title,
             message = message,
             callback = callback

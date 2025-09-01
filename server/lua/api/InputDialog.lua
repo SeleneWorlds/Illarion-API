@@ -14,6 +14,7 @@ InputDialog.SeleneSetters = {}
 InputDialog.SeleneMetatable = {
     __call = function(self, title, description, multiline, maxChars, callback)
         local o = {
+            type = "InputDialog",
             title = title,
             description = description,
             multiline = multiline,

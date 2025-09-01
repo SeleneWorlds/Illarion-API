@@ -16,6 +16,7 @@ SelectionDialog.SeleneSetters = {}
 SelectionDialog.SeleneMetatable = {
     __call = function(self, title, message, callback)
         local o = {
+            type = "SelectionDialog",
             title = title,
             message = message,
             callback = callback
