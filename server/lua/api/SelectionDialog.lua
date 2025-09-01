@@ -4,6 +4,7 @@ end
 
 SelectionDialog = {}
 
+SelectionDialog.SeleneConstructor = nyi("SelectionDialog.SeleneConstructor")
 SelectionDialog.SeleneMethods = {
     addOption = nyi("addOption"),
     setCloseOnMove = nyi("setCloseOnMove"),
@@ -15,12 +16,7 @@ SelectionDialog.SeleneSetters = {}
 
 SelectionDialog.SeleneMetatable = {
     __call = function(self, title, message, callback)
-        local o = {
-            type = "SelectionDialog",
-            title = title,
-            message = message,
-            callback = callback
-        }
+        local o = SelectionDialog.SeleneConstructor(title, message, callback)
         setmetatable(o, self)
         self.__index = self
         return o

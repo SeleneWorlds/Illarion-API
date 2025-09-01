@@ -10,6 +10,7 @@ CraftingDialog.playerLooksAtIngredient = 3
 CraftingDialog.playerCraftingComplete = 4
 CraftingDialog.playerCraftingAborted = 5
 
+CraftingDialog.SeleneConstructor = nyi("CraftingDialog.SeleneConstructor")
 CraftingDialog.SeleneMethods = {
     clearGroupsAndProducts = nyi("clearGroupsAndProducts"),
     addGroup = nyi("addGroup"),
@@ -26,13 +27,7 @@ CraftingDialog.SeleneSetters = {}
 
 CraftingDialog.SeleneMetatable = {
     __call = function(self, title, sfx, sfxDuration, callback)
-        local o = {
-            type = "CraftingDialog",
-            title = title,
-            sfx = sfx,
-            sfxDuration = sfxDuration,
-            callback = callback
-        }
+        local o = CraftingDialog.SeleneConstructor(title, sfx, sfxDuration, callback)
         setmetatable(o, self)
         self.__index = self
         return o

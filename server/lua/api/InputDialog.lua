@@ -4,6 +4,7 @@ end
 
 InputDialog = {}
 
+InputDialog.SeleneConstructor = nyi("InputDialog.SeleneConstructor")
 InputDialog.SeleneMethods = {
     getInput = nyi("getInput"),
     getSuccess = nyi("getSuccess")
@@ -13,14 +14,7 @@ InputDialog.SeleneSetters = {}
 
 InputDialog.SeleneMetatable = {
     __call = function(self, title, description, multiline, maxChars, callback)
-        local o = {
-            type = "InputDialog",
-            title = title,
-            description = description,
-            multiline = multiline,
-            maxChars = maxChars,
-            callback = callback
-        }
+        local o = InputDialog.SeleneConstructor(title, description, multiline, maxChars, callback)
         setmetatable(o, self)
         self.__index = self
         return o

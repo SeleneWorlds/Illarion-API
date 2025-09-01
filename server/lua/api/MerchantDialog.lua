@@ -11,6 +11,7 @@ MerchantDialog.listSell = 0
 MerchantDialog.listBuyPrimary = 1
 MerchantDialog.listBuySecondary = 2
 
+MerchantDialog.SeleneConstructor = nyi("MerchantDialog.SeleneConstructor")
 MerchantDialog.SeleneMethods = {
     addOffer = nyi("addOffer"),
     addPrimaryRequest = nyi("getData"),
@@ -27,11 +28,7 @@ MerchantDialog.SeleneSetters = {}
 
 MerchantDialog.SeleneMetatable = {
     __call = function(self, title, callback)
-        local o = {
-            type = "MerchantDialog",
-            title = title,
-            callback = callback
-        }
+        local o = MerchantDialog.SeleneConstructor(title, callback)
         setmetatable(o, self)
         self.__index = self
         return o

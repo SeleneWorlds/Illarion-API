@@ -4,18 +4,14 @@ end
 
 MessageDialog = {}
 
+MessageDialog.SeleneConstructor = nyi("MessageDialog.SeleneConstructor")
 MessageDialog.SeleneMethods = {}
 MessageDialog.SeleneGetters = {}
 MessageDialog.SeleneSetters = {}
 
 MessageDialog.SeleneMetatable = {
     __call = function(self, title, message, callback)
-        local o = {
-            type = "MessageDialog",
-            title = title,
-            message = message,
-            callback = callback
-        }
+        local o = MessageDialog.SeleneConstructor(title, message, callback)
         setmetatable(o, self)
         self.__index = self
         return o
