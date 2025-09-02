@@ -8,6 +8,7 @@
     "server/lua/api/Character.lua",
     "server/lua/api/colour.lua",
     "server/lua/api/Container.lua",
+    "server/lua/api/CraftingDialog.lua",
     "server/lua/api/Field.lua",
     "server/lua/api/InputDialog.lua",
     "server/lua/api/Item.lua",
