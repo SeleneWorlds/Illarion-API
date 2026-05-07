@@ -121,6 +121,7 @@ Character.SeleneMethods = {
     move = nyi("move"),
     turn = nyi("turn"),
     getNextStepDir = nyi("getNextStepDir"),
+    getStepList = nyi("getStepList"),
     setRace = nyi("setRace"),
     getRace = nyi("getRace"),
     getFaceTo = nyi("getFaceTo"),
