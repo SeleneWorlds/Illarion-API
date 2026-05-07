@@ -66,6 +66,7 @@ Character = {
     mediumPriority = 101,
     highPriority = 102,
 }
+CCharacter = Character
 
 local function nyi(name)
     return function() error(name .. " not yet implemented") end
