@@ -1,5 +1,5 @@
 ## About this Repository
 
-This is a Selene bundle implementing the API used by server scripts of the roleplaying game Illarion based on Selene and the Moonlight standard API.
+This is a Selene bundle defining stubs for the third party API used by server scripts of the online roleplaying game Illarion.
 
 The original sources used to derive this implementation can be found under https://github.com/Illarion-eV.
