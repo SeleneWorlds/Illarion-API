@@ -1,4 +1,5 @@
 LongTimeEffect = {}
+CLongTimeEffect = LongTimeEffect
 
 setmetatable(LongTimeEffect, {
     __call = function(self, id, nextCalled)
