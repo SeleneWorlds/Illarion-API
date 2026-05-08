@@ -1,4 +1,7 @@
 position = {}
+equapos = function(self, other)
+    return self.x == other.x and self.y == other.y and self.z == other.z
+end
 
 setmetatable(position, {
     __call = function (self, x, y, z)
