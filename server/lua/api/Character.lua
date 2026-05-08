@@ -111,6 +111,7 @@ Character.SeleneMethods = {
     changeQualityAt = nyi("changeQualityAt"),
     isAdmin = nyi("isAdmin"),
     talk = nyi("talk"),
+    talkLanguage = nyi("talkLanguage"),
     sendCharDescription = nyi("sendCharDescription"),
     startAction = nyi("startAction"),
     abortAction = nyi("abortAction"),
