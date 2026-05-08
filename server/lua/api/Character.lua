@@ -130,6 +130,7 @@ Character.SeleneMethods = {
     getFaceTo = nyi("getFaceTo"),
     get_face_to = nyi("getFaceTo"),
     getType = nyi("getType"),
+    get_type = nyi("get_type"),
     createItem = nyi("createItem"),
     getLoot = nyi("getLoot"),
     increasePoisonValue = nyi("increasePoisonValue"),
@@ -224,3 +225,4 @@ Character.SeleneMetatable = {
 }
 
 isValidChar = nyi("isValidChar")
+getCharForId = nyi("getCharForId")
