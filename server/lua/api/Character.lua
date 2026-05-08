@@ -127,6 +127,7 @@ Character.SeleneMethods = {
     getRace = nyi("getRace"),
     get_race = nyi("get_race"),
     getFaceTo = nyi("getFaceTo"),
+    get_face_to = nyi("getFaceTo"),
     getType = nyi("getType"),
     createItem = nyi("createItem"),
     getLoot = nyi("getLoot"),
