@@ -98,6 +98,7 @@ Character.SeleneSetters = {
 Character.SeleneMethods = {
     isNewPlayer = nyi("isNewPlayer"),
     pageGM = nyi("pageGM"),
+    sendMenu = nyi("sendMenu"),
     requestInputDialog = nyi("requestInputDialog"),
     requestMessageDialog = nyi("requestMessageDialog"),
     requestMerchantDialog = nyi("requestMerchantDialog"),
