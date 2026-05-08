@@ -16,6 +16,7 @@
     "server/lua/api/ItemStruct.lua",
     "server/lua/api/logging.lua",
     "server/lua/api/LongTimeEffect.lua",
+    "server/lua/api/MenuStruct.lua",
     "server/lua/api/MessageDialog.lua",
     "server/lua/api/Player.lua",
     "server/lua/api/position.lua",
