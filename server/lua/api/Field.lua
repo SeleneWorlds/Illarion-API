@@ -3,12 +3,11 @@ local function nyi(name)
 end
 
 Field = {}
-Field.SeleneGetters = {
-    tile = nyi("tile"),
-}
+Field.SeleneGetters = {}
 Field.SeleneSetters = {}
 
 Field.SeleneMethods = {
+    tile = nyi("tile"),
     getStackItem = nyi("getStackItem"),
     countItems = nyi("countItems"),
     isPassable = nyi("isPassable"),
