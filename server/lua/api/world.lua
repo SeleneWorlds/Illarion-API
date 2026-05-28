@@ -30,6 +30,7 @@ world.SeleneMethods = {
     getTime = nyi("getTime"),
     erase = nyi("erase"),
     increase = nyi("increase"),
+    itemInform = nyi("itemInform"),
     swap = nyi("swap"),
     createItemFromId = nyi("createItemFromId"),
     createItemFromItem = nyi("createItemFromItem"),
