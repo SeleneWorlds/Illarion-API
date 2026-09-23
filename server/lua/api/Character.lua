@@ -189,6 +189,7 @@ Character.SeleneMethods = {
     callAttackScript = nyi("callAttackScript"),
     getItemList = nyi("getItemList"),
     getPlayerLanguage = nyi("getPlayerLanguage"),
+    GetPlayerLanguage = nyi("GetPlayerLanguage"),
     getBackPack = nyi("getBackPack"),
     getDepot = nyi("getDepot"),
     setQuestProgress = nyi("setQuestProgress"),
