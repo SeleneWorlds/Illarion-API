@@ -197,6 +197,7 @@ Character.SeleneMethods = {
     getOnRoute = nyi("getOnRoute"),
     setOnRoute = nyi("setOnRoute"),
     getMonsterType = nyi("getMonsterType"),
+    get_mon_type = nyi("get_mon_type"),
     logAdmin = nyi("logAdmin"),
     stopAttack = nyi("stopAttack"),
     getAttackTarget = nyi("getAttackTarget")
