@@ -205,6 +205,11 @@ Character.SeleneMethods = {
 }
 
 Character.SeleneMetatable = {
+    __eq = function(a, b)
+        if type(a) ~= "table" or type(b) ~= "table" then return false end
+        local entity = a.SeleneEntity
+        return entity ~= nil and entity == b.SeleneEntity
+    end,
     __index = function(table, key)
         local method = Character.SeleneMethods[key]
         if method then
