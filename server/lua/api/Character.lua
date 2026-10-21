@@ -149,6 +149,7 @@ Character.SeleneMethods = {
     swapAtPos = nyi("swapAtPos"),
     createAtPos = nyi("createAtPos"),
     getItemAt = nyi("getItemAt"),
+    equipItem = nyi("equipItem"), -- Selene-only API for equipping an item
     getSkillName = nyi("getSkillName"),
     getSkill = nyi("getSkill"),
     getMinorSkill = nyi("getMinorSkill"),
